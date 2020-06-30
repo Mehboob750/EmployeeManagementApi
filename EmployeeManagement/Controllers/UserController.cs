@@ -52,5 +52,31 @@ namespace EmployeeManagementApi.Controllers
                 return BadRequest(new { e.Message });
             }
         }
+
+        [HttpPost]
+        [Route("userLogin")]
+        public async Task<IActionResult> UserLogin(UserModel userModel)
+        {
+            try
+            {
+                var response = await this.userBusiness.UserLogin(userModel);
+                if (!response.Equals(false))
+                {
+                    var status = "Success";
+                    var message = "Login Successfully";
+                    return this.Ok(new { status, message });
+                }
+                else
+                {
+                    var status = "Failed";
+                    var message = "Fail To Login";
+                    return this.BadRequest(new { status, message });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
     }
 }

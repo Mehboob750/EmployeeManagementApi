@@ -45,5 +45,32 @@ namespace EmployeeBuisenessLayer.Services
                 throw new Exception(exception.Message);
             }
         }
+
+        public async Task<bool> UserLogin(UserModel userModel)
+        {
+            try
+            {
+                if (userModel != null)
+                {
+                    var response = await userRepository.UserLogin(userModel);
+                    if (response == true)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

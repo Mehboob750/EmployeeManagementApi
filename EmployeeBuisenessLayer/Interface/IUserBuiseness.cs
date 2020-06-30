@@ -9,5 +9,7 @@ namespace EmployeeBuisenessLayer.Interface
     public interface IUserBuiseness
     {
         Task<bool> UserRegistration(UserModel userModel);
+
+        Task<bool> UserLogin(UserModel userModel);
     }
 }

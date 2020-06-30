@@ -9,5 +9,7 @@ namespace EmployeeRepositoryLayer.Interface
     public interface IUserRepository
     {
         Task<bool> UserRegistration(UserModel userModel);
+
+        Task<bool> UserLogin(UserModel userModel);
     }
 }

@@ -24,6 +24,7 @@ namespace EmployeeCommonLayer
         public string EmailId { get; set; }
 
         [RegularExpression("([1-9]{1}[0-9]{9})$", ErrorMessage = "Phone number is not valid")]
+
         public string PhoneNumber { get; set; }
 
         public string City { get; set; }
@@ -31,5 +32,11 @@ namespace EmployeeCommonLayer
         public DateTime RegistrationDate { get; set; }
 
         public DateTime UpdationDate { get; set; }
+
+        [RegularExpression("^.{8,30}$", ErrorMessage = "Password Length should be between 8 to 15")]
+        public string Password { get; set; }
+
+
+
     }
 }
