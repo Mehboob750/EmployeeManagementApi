@@ -128,5 +128,31 @@ namespace EmployeeManagement.Controllers
                 return BadRequest(new { e.Message });
             }
         }
+
+        [HttpPost]
+        [Route("search")]
+        public IActionResult SearchEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                var response = this.employeeBusiness.SearchEmployee(employeeModel);
+                if (!response.Equals(null))
+                {
+                    var status = "Success";
+                    var message = "Record Found";
+                    return this.Ok(new { status, message, response });
+                }
+                else
+                {
+                    var status = "Failed";
+                    var message = "Record Not Found";
+                    return this.BadRequest(new { status, message });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
     }
 }

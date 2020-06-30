@@ -15,5 +15,7 @@ namespace EmployeeRepositoryLayer.Interface
         Task<bool> UpdateEmployee(EmployeeModel employeeModel);
 
         Task<bool> DeleteEmployee(EmployeeModel employeeModel);
+
+        IList<EmployeeModel> SearchEmployee(EmployeeModel employeeModel);
     }
 }

@@ -111,5 +111,18 @@ namespace EmployeeBuisenessLayer.Services
                 throw new Exception(exception.Message);
             }
         }
+
+        public IList<EmployeeModel> SearchEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                var response = employeeRepository.SearchEmployee(employeeModel);
+                return response;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
