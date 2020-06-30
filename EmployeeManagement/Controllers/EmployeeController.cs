@@ -51,5 +51,31 @@ namespace EmployeeManagement.Controllers
                 return BadRequest(new { e.Message });
             }
         }
+
+        [HttpGet]
+        [Route("read")]
+        public IActionResult ReadEmployee()
+        {
+            try
+            {
+                var response = this.employeeBusiness.ReadEmployee();
+                if (!response.Equals(null))
+                {
+                    var status = "Success";
+                    return this.Ok(new { status, response });
+                }
+                else
+                {
+                    var status = "Failed";
+                    var message = "Fail To Read Data";
+                    return this.BadRequest(new { status, message });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
     }
 }

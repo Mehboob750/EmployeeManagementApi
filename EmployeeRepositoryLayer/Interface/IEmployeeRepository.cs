@@ -10,5 +10,7 @@ namespace EmployeeRepositoryLayer.Interface
     {
         Task<bool> AddEmployee(EmployeeModel employeeModel);
 
+        IList<EmployeeModel> ReadEmployee();
+
     }
 }

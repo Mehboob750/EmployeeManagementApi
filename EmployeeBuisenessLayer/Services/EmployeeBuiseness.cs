@@ -44,5 +44,19 @@ namespace EmployeeBuisenessLayer.Services
                 throw new Exception(exception.Message);
             }
         }
+
+        public IList<EmployeeModel> ReadEmployee()
+        {
+            try
+            {
+                var response = employeeRepository.ReadEmployee();
+                return response;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
     }
 }

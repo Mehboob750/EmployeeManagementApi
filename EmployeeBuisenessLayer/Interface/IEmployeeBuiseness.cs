@@ -9,5 +9,7 @@ namespace EmployeeBuisenessLayer.Interface
     public interface IEmployeeBuiseness
     {
         Task<bool> AddEmployee(EmployeeModel employeeModel);
+
+        IList<EmployeeModel> ReadEmployee();
     }
 }

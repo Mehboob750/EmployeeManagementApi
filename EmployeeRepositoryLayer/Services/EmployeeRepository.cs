@@ -46,5 +46,37 @@ namespace EmployeeRepositoryLayer.Services
                 throw new Exception(e.Message);
             }
         }
+
+        public IList<EmployeeModel> ReadEmployee()
+        {
+            try
+            {
+                IList<EmployeeModel> employeeModelsList = new List<EmployeeModel>();
+                SqlCommand sqlCommand = new SqlCommand("spReadRecord", this.sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                this.sqlConnection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    EmployeeModel employeeModel = new EmployeeModel();
+                    employeeModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+                    employeeModel.FirstName = sqlDataReader["FirstName"].ToString();
+                    employeeModel.LastName = sqlDataReader["LastName"].ToString();
+                    employeeModel.EmailId = sqlDataReader["EmailId"].ToString();
+                    employeeModel.Gender = sqlDataReader["Gender"].ToString();
+                    employeeModel.PhoneNumber = sqlDataReader["PhoneNumber"].ToString();
+                    employeeModel.City = sqlDataReader["City"].ToString();
+                    employeeModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
+                    employeeModelsList.Add(employeeModel);
+                }
+                this.sqlConnection.Close();
+                return employeeModelsList;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
     }
 }
