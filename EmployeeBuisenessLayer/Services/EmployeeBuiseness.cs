@@ -84,5 +84,32 @@ namespace EmployeeBuisenessLayer.Services
                 throw new Exception(exception.Message);
             }
         }
+
+        public async Task<bool> DeleteEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                if (employeeModel != null)
+                {
+                    var response = await employeeRepository.DeleteEmployee(employeeModel);
+                    if (response == true)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace EmployeeBuisenessLayer.Interface
         IList<EmployeeModel> ReadEmployee();
 
         Task<bool> UpdateEmployee(EmployeeModel employeeModel);
+
+        Task<bool> DeleteEmployee(EmployeeModel employeeModel);
     }
 }

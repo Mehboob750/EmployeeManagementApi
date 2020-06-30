@@ -102,5 +102,31 @@ namespace EmployeeManagement.Controllers
                 return BadRequest(new { e.Message });
             }
         }
+
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                var response = await this.employeeBusiness.DeleteEmployee(employeeModel);
+                if (!response.Equals(null))
+                {
+                    var status = "Success";
+                    var message = "Deleted Successfully";
+                    return this.Ok(new { status, message });
+                }
+                else
+                {
+                    var status = "Failed";
+                    var message = "Fail To Delete Data";
+                    return this.BadRequest(new { status, message });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
     }
 }

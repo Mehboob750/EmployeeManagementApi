@@ -109,5 +109,33 @@ namespace EmployeeRepositoryLayer.Services
                 throw new Exception(exception.Message);
             }
         }
+
+        public async Task<bool> DeleteEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand("spDeleteRecord", this.sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@EmployeeId", employeeModel.EmployeeId);
+                this.sqlConnection.Open();
+                var response = await sqlCommand.ExecuteNonQueryAsync();
+                if (response > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlConnection.Close();
+            }
+        }
     }
 }
