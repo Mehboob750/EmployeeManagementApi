@@ -31,6 +31,8 @@ namespace EmployeeManagement
         {
             services.AddTransient<IEmployeeBuiseness, EmployeeBuiseness>();
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IUserBuiseness, UserBuiseness>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
