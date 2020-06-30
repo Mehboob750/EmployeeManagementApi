@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using EmployeeBuisenessLayer.Interface;
+using EmployeeCommonLayer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EmployeeManagement.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class EmployeeController : ControllerBase
+    {
+        public readonly IEmployeeBuiseness employeeBusiness;
+
+        public EmployeeController(IEmployeeBuiseness employeeBusiness)
+        {
+            this.employeeBusiness = employeeBusiness;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<string>> Post()
+        {
+            return new string[] { "Value 1", "Value 2" };
+        }
+
+        [HttpPost]
+        [Route("create")]
+        public async Task<IActionResult> AddEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                var response = await this.employeeBusiness.AddEmployee(employeeModel);
+                if (!response.Equals(null))
+                {
+                    var status = "Success";
+                    var message = "Data Added Successfully";
+                    return this.Ok(new { status, message });
+                }
+                else
+                {
+                    var status = "Failed";
+                    var message = "Fail To Add Data";
+                    return this.BadRequest(new { status, message });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+    }
+}
