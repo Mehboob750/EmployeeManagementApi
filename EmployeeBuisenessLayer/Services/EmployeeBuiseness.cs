@@ -58,5 +58,31 @@ namespace EmployeeBuisenessLayer.Services
             }
         }
 
+        public async Task<bool> UpdateEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                if (employeeModel != null)
+                {
+                    var response = await employeeRepository.UpdateEmployee(employeeModel);
+                    if (response == true)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

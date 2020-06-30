@@ -77,5 +77,30 @@ namespace EmployeeManagement.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdateEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                var response = await this.employeeBusiness.UpdateEmployee(employeeModel);
+                if (!response.Equals(null))
+                {
+                    var status = "Success";
+                    var message = "Data Updated Successfully";
+                    return this.Ok(new { status, message });
+                }
+                else
+                {
+                    var status = "Failed";
+                    var message = "Fail To Update Data";
+                    return this.BadRequest(new { status, message });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
     }
 }

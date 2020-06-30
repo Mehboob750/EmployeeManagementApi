@@ -12,5 +12,6 @@ namespace EmployeeRepositoryLayer.Interface
 
         IList<EmployeeModel> ReadEmployee();
 
+        Task<bool> UpdateEmployee(EmployeeModel employeeModel);
     }
 }

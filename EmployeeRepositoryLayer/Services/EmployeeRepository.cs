@@ -78,5 +78,36 @@ namespace EmployeeRepositoryLayer.Services
             }
         }
 
+        public async Task<bool> UpdateEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand("spUpdateRecord", this.sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@EmployeeId", employeeModel.EmployeeId);
+                sqlCommand.Parameters.AddWithValue("@FirstName", employeeModel.FirstName);
+                sqlCommand.Parameters.AddWithValue("@LastName", employeeModel.LastName);
+                sqlCommand.Parameters.AddWithValue("@Gender", employeeModel.Gender);
+                sqlCommand.Parameters.AddWithValue("@EmailId", employeeModel.EmailId);
+                sqlCommand.Parameters.AddWithValue("@PhoneNumber", employeeModel.PhoneNumber);
+                sqlCommand.Parameters.AddWithValue("@City", employeeModel.City);
+                sqlCommand.Parameters.AddWithValue("@UpdationDate", DateTime.Now);
+
+                this.sqlConnection.Open();
+                var response = await sqlCommand.ExecuteNonQueryAsync();
+                if (response > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
