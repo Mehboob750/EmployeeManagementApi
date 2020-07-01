@@ -20,138 +20,128 @@ namespace EmployeeManagement.Controllers
             this.employeeBusiness = employeeBusiness;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Post()
-        {
-            return new string[] { "Value 1", "Value 2" };
-        }
-
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> AddEmployee(EmployeeModel employeeModel)
         {
             try
             {
                 var response = await this.employeeBusiness.AddEmployee(employeeModel);
-                if (!response.Equals(null))
+                if (!response.Equals(false))
                 {
-                    var status = "Success";
+                    bool success = true;
                     var message = "Data Added Successfully";
-                    return this.Ok(new { status, message });
+                    return this.Ok(new { success, message, data = employeeModel });
                 }
                 else
                 {
-                    var status = "Failed";
+                    bool success = false;
                     var message = "Fail To Add Data";
-                    return this.BadRequest(new { status, message });
+                    return this.BadRequest(new { success, message, data = "null" });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return BadRequest(new { success = false , message = e.Message, data = "null" });
             }
         }
 
         [HttpGet]
-        [Route("read")]
         public IActionResult ReadEmployee()
         {
             try
             {
                 var response = this.employeeBusiness.ReadEmployee();
-                if (!response.Equals(null))
+                if (!response.Equals(false))
                 {
-                    var status = "Success";
-                    return this.Ok(new { status, response });
+                    bool status = true;
+                    var message = "Data Read Successfully";
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
-                    var status = "Failed";
+                    bool status = false;
                     var message = "Fail To Read Data";
-                    return this.BadRequest(new { status, message });
+                    return this.BadRequest(new { status, message, data = "null" });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return BadRequest(new { success = false, message = e.Message, data = "null" });
             }
         }
 
-        [HttpPut]
-        [Route("update")]
-        public async Task<IActionResult> UpdateEmployee(EmployeeModel employeeModel)
+        [HttpPut("{EmployeeId}")]
+        public async Task<IActionResult> UpdateEmployee([FromRoute] EmployeeModel employeeModel)
         {
             try
             {
                 var response = await this.employeeBusiness.UpdateEmployee(employeeModel);
-                if (!response.Equals(null))
+                if (!response.Equals(false))
                 {
-                    var status = "Success";
+                    bool status = true;
                     var message = "Data Updated Successfully";
-                    return this.Ok(new { status, message });
+                    return this.Ok(new { status, message, data = employeeModel });
                 }
                 else
                 {
-                    var status = "Failed";
+                    bool status = false;
                     var message = "Fail To Update Data";
-                    return this.BadRequest(new { status, message });
+                    return this.BadRequest(new { status, message, data = "null" });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return BadRequest(new { success = false, message = e.Message, data = "null" });
             }
         }
 
-        [HttpDelete]
-        [Route("delete")]
-        public async Task<IActionResult> DeleteEmployee(EmployeeModel employeeModel)
+        [HttpDelete("{EmployeeId}")]
+        public async Task<IActionResult> DeleteEmployee([FromRoute] EmployeeModel employeeModel)
         {
             try
             {
                 var response = await this.employeeBusiness.DeleteEmployee(employeeModel);
-                if (!response.Equals(null))
+                if (!response.Equals(false))
                 {
-                    var status = "Success";
+                    bool status = true;
                     var message = "Deleted Successfully";
-                    return this.Ok(new { status, message });
+                    return this.Ok(new { status, message, data = employeeModel });
                 }
                 else
                 {
-                    var status = "Failed";
-                    var message = "Fail To Delete Data";
-                    return this.BadRequest(new { status, message });
+                    bool status = false;
+                    var message = "No record To Delete";
+                    return this.BadRequest(new { status, message, data = "null" });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return BadRequest(new { success = false, message = e.Message, data = "null" });
             }
         }
 
-        [HttpPost]
-        [Route("search")]
-        public IActionResult SearchEmployee(EmployeeModel employeeModel)
+        [HttpGet("{EmployeeId}")]
+        public IActionResult SearchEmployee([FromRoute] EmployeeModel employeeModel)
         {
             try
             {
                 var response = this.employeeBusiness.SearchEmployee(employeeModel);
-                if (!response.Equals(null))
+                if (!response.Count.Equals(0))
                 {
-                    var status = "Success";
+                    bool status = true;
                     var message = "Record Found";
-                    return this.Ok(new { status, message, response });
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
-                    var status = "Failed";
+                    bool status = false;
                     var message = "Record Not Found";
-                    return this.BadRequest(new { status, message });
+                    return this.BadRequest(new { status, message, data = "null" });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return BadRequest(new { success = false, message = e.Message, data = "null" });
             }
         }
     }

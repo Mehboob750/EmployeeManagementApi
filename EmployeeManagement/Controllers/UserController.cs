@@ -21,12 +21,6 @@ namespace EmployeeManagementApi.Controllers
             this.userBusiness = userBusiness;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Post()
-        {
-            return new string[] { "Value 1", "Value 2" };
-        }
-
         [HttpPost]
         [Route("userRegistration")]
         public async Task<IActionResult> UserRegistration(UserModel userModel)
@@ -36,20 +30,20 @@ namespace EmployeeManagementApi.Controllers
                 var response = await this.userBusiness.UserRegistration(userModel);
                 if (!response.Equals(null))
                 {
-                    var status = "Success";
-                    var message = "Data Added Successfully";
-                    return this.Ok(new { status, message });
+                    bool status = true;
+                    var message = "User Registered Successfully";
+                    return this.Ok(new { status, message, data = userModel });
                 }
                 else
                 {
-                    var status = "Failed";
-                    var message = "Fail To Add Data";
-                    return this.BadRequest(new { status, message });
+                    bool status = false;
+                    var message = "Fail To Register User";
+                    return this.BadRequest(new { status, message, data = "null" });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return BadRequest(new { success = false, message = e.Message, data = "null" });
             }
         }
 
@@ -62,20 +56,20 @@ namespace EmployeeManagementApi.Controllers
                 var response = await this.userBusiness.UserLogin(userModel);
                 if (!response.Equals(false))
                 {
-                    var status = "Success";
+                    bool status = true;
                     var message = "Login Successfully";
-                    return this.Ok(new { status, message });
+                    return this.Ok(new { status, message, data = userModel });
                 }
                 else
                 {
-                    var status = "Failed";
+                    bool status = false;
                     var message = "Fail To Login";
-                    return this.BadRequest(new { status, message });
+                    return this.BadRequest(new { status, message, data = "null" });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return BadRequest(new { success = false, message = e.Message, data = "null" });
             }
         }
     }

@@ -146,6 +146,7 @@ namespace EmployeeRepositoryLayer.Services
                 SqlCommand sqlCommand = new SqlCommand("spSearchEmployee", this.sqlConnection);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@EmployeeId", employeeModel.EmployeeId);
+                //sqlCommand.Parameters.Add("@EmployeeId", SqlDbType.Int).Value = employeeModel.EmployeeId;
                 this.sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 while (sqlDataReader.Read())

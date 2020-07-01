@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManagement", "EmployeeManagement\EmployeeManagement.csproj", "{E7719592-7D41-4286-A83E-752C8EFAC28F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement", "EmployeeManagement\EmployeeManagement.csproj", "{E7719592-7D41-4286-A83E-752C8EFAC28F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeBuisenessLayer", "EmployeeBuisenessLayer\EmployeeBuisenessLayer.csproj", "{41BA880E-B963-4B52-A0A5-4124850FEDEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeBuisenessLayer", "EmployeeBuisenessLayer\EmployeeBuisenessLayer.csproj", "{41BA880E-B963-4B52-A0A5-4124850FEDEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeCommonLayer", "EmployeeCommonLayer\EmployeeCommonLayer.csproj", "{F270449C-C79D-49C0-A29A-2C2DD11180DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeCommonLayer", "EmployeeCommonLayer\EmployeeCommonLayer.csproj", "{F270449C-C79D-49C0-A29A-2C2DD11180DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeRepositoryLayer", "EmployeeRepositoryLayer\EmployeeRepositoryLayer.csproj", "{4481CC7F-143C-4376-BBB2-0426E8711E33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeRepositoryLayer", "EmployeeRepositoryLayer\EmployeeRepositoryLayer.csproj", "{4481CC7F-143C-4376-BBB2-0426E8711E33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManagementTestCases", "EmployeeManagementTestCases\EmployeeManagementTestCases.csproj", "{F75FC1A8-6A92-47D6-83B2-D2D38D160831}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4481CC7F-143C-4376-BBB2-0426E8711E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4481CC7F-143C-4376-BBB2-0426E8711E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4481CC7F-143C-4376-BBB2-0426E8711E33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F75FC1A8-6A92-47D6-83B2-D2D38D160831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F75FC1A8-6A92-47D6-83B2-D2D38D160831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F75FC1A8-6A92-47D6-83B2-D2D38D160831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F75FC1A8-6A92-47D6-83B2-D2D38D160831}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
