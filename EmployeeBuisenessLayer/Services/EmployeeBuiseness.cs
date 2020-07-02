@@ -26,7 +26,7 @@ namespace EmployeeBuisenessLayer.Services
         private readonly IEmployeeRepository employeeRepository;
 
         /// <summary>
-        /// Initializes a new instance of the IEmployeeRepository
+        /// Initializes a new instance of the <see cref="EmployeeBuiseness"/> class.
         /// </summary>
         /// <param name="employeeRepository">It contains the object IEmployeeRepository</param>
         public EmployeeBuiseness(IEmployeeRepository employeeRepository)
@@ -48,6 +48,7 @@ namespace EmployeeBuisenessLayer.Services
                     // Call the Add Employee Method of Employee Repository Class
                     var response = await this.employeeRepository.AddEmployee(employeeModel);
 
+                    // Check response if equal returns true
                     if (response == true)
                     {
                         return true;
@@ -99,6 +100,8 @@ namespace EmployeeBuisenessLayer.Services
                 {
                     // Call the Update Employee Method of Employee Repository Class
                     var response = await this.employeeRepository.UpdateEmployee(employeeModel);
+
+                    // Check response if equal returns true
                     if (response == true)
                     {
                         return true;
@@ -132,6 +135,8 @@ namespace EmployeeBuisenessLayer.Services
                 {
                     // Call the Delete Employee Method of Employee Repository Class
                     var response = await this.employeeRepository.DeleteEmployee(employeeModel);
+
+                    // Check response if equal returns true
                     if (response == true)
                     {
                         return true;

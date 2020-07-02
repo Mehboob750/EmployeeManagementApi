@@ -25,7 +25,7 @@ namespace EmployeeBuisenessLayer.Services
         private readonly IUserRepository userRepository;
 
         /// <summary>
-        /// Initializes a new instance of the IUserRepository
+        /// Initializes a new instance of the <see cref="UserBuiseness"/> class.
         /// </summary>
         /// <param name="userRepository">It contains the object IUserRepository</param>
         public UserBuiseness(IUserRepository userRepository)
@@ -47,6 +47,7 @@ namespace EmployeeBuisenessLayer.Services
                     // Call the User Registration Method of User Repository Class
                     var response = await this.userRepository.UserRegistration(userModel);
 
+                    // check response if equal returns true
                     if (response == true)
                     {
                         return true;
@@ -80,6 +81,8 @@ namespace EmployeeBuisenessLayer.Services
                 {
                     // Call the User Login Method of User Repository Class
                     var response = await this.userRepository.UserLogin(userModel);
+
+                    // check response if equal returns true
                     if (response == true)
                     {
                         return true;
