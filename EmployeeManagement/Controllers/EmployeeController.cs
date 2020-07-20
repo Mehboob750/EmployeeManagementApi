@@ -41,30 +41,30 @@ namespace EmployeeManagement.Controllers
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
-        public async Task<IActionResult> AddEmployee(EmployeeModel employeeModel)
+        public IActionResult AddEmployee([FromBody] EmployeeModel employeeModel)
         {
             try
             {
                 // Call the Add Employee Method of Employee Business classs
-                var response = await this.employeeBusiness.AddEmployee(employeeModel);
+                var response =  this.employeeBusiness.AddEmployee(employeeModel);
 
                 // check if response is equal to true
                 if (!response.Equals(false))
                 {
-                    bool success = true;
+                    bool status = true;
                     var message = "Data Added Successfully";
-                    return this.Ok(new { success, message, data = employeeModel });
+                    return this.Ok(new { status, message, data = employeeModel });
                 }
                 else
                 {
-                    bool success = false;
+                    bool status = false;
                     var message = "Fail To Add Data";
-                    return this.BadRequest(new { success, message, data = "null" });
+                    return this.BadRequest(new { status, message });
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, data = "null" });
+                return this.BadRequest(new { status = false, message = e.Message});
             }
         }
 
@@ -91,12 +91,12 @@ namespace EmployeeManagement.Controllers
                 {
                     bool status = false;
                     var message = "Fail To Read Data";
-                    return this.BadRequest(new { status, message, data = "null" });
+                    return this.BadRequest(new { status, message });
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, data = "null" });
+                return this.BadRequest(new { status = false, message = e.Message });
             }
         }
 
@@ -106,12 +106,12 @@ namespace EmployeeManagement.Controllers
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPut("{EmployeeId}")]
-        public async Task<IActionResult> UpdateEmployee([FromRoute] EmployeeModel employeeModel)
+        public async Task<IActionResult> UpdateEmployee([FromRoute] int EmployeeId, [FromBody] EmployeeModel employeeModel)
         {
             try
             {
                 // Call the Update Employee Method of Employee Business classs
-                var response = await this.employeeBusiness.UpdateEmployee(employeeModel);
+                var response = await this.employeeBusiness.UpdateEmployee(EmployeeId, employeeModel);
 
                 // check if response is equal to true
                 if (!response.Equals(false))
@@ -124,12 +124,12 @@ namespace EmployeeManagement.Controllers
                 {
                     bool status = false;
                     var message = "Fail To Update Data";
-                    return this.BadRequest(new { status, message, data = "null" });
+                    return this.BadRequest(new { status, message });
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, data = "null" });
+                return this.BadRequest(new { success = false, message = e.Message });
             }
         }
 
@@ -139,30 +139,30 @@ namespace EmployeeManagement.Controllers
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpDelete("{EmployeeId}")]
-        public async Task<IActionResult> DeleteEmployee([FromRoute] EmployeeModel employeeModel)
+        public IActionResult DeleteEmployee([FromRoute] int EmployeeId)
         {
             try
             {
                 // Call the Delete Employee Method of Employee Business classs
-                var response = await this.employeeBusiness.DeleteEmployee(employeeModel);
+                var response =  this.employeeBusiness.DeleteEmployee(EmployeeId);
 
                 // check if response is equal to true
-                if (!response.Equals(false))
+                if (!response.Count.Equals(0))
                 {
                     bool status = true;
                     var message = "Deleted Successfully";
-                    return this.Ok(new { status, message, data = employeeModel });
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
                     bool status = false;
                     var message = "No record To Delete";
-                    return this.BadRequest(new { status, message, data = "null" });
+                    return this.BadRequest(new { status, message});
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, data = "null" });
+                return this.BadRequest(new { status = false, message = e.Message});
             }
         }
 
@@ -172,12 +172,12 @@ namespace EmployeeManagement.Controllers
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpGet("{EmployeeId}")]
-        public IActionResult SearchEmployee([FromRoute] EmployeeModel employeeModel)
+        public IActionResult SearchEmployee([FromRoute] int EmployeeId)
         {
             try
             {
                 // Call the Search Employee Method of Employee Business classs
-                var response = this.employeeBusiness.SearchEmployee(employeeModel);
+                var response = this.employeeBusiness.SearchEmployee(EmployeeId);
 
                 // check if response count is equal to 1
                 if (!response.Count.Equals(0))
@@ -190,12 +190,12 @@ namespace EmployeeManagement.Controllers
                 {
                     bool status = false;
                     var message = "Record Not Found";
-                    return this.BadRequest(new { status, message, data = "null" });
+                    return this.BadRequest(new { status, message });
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, data = "null" });
+                return this.BadRequest(new { status = false, message = e.Message});
             }
         }
     }

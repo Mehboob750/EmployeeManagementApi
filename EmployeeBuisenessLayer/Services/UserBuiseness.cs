@@ -9,9 +9,11 @@
 namespace EmployeeBuisenessLayer.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
+    using EmployeeCommonLayer.Model;
     using EmployeeRepositoryLayer.Interface;
 
     /// <summary>
@@ -73,33 +75,18 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Login Successfully it returns true</returns>
-        public async Task<bool> UserLogin(UserModel userModel)
+        public IList<LoginModel> UserLogin(UserModel userModel)
         {
             try
             {
-                if (userModel != null)
-                {
-                    // Call the User Login Method of User Repository Class
-                    var response = await this.userRepository.UserLogin(userModel);
-
-                    // check response if equal returns true
-                    if (response == true)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                // Call the User Login Method of User Repository Class
+                var response = this.userRepository.UserLogin(userModel);
+                return response;
             }
             catch (Exception exception)
             {
                 throw new Exception(exception.Message);
+
             }
         }
     }

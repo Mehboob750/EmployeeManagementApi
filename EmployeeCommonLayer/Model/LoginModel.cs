@@ -1,25 +1,18 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="UserModel.cs" company="BridgeLabz Solution">
-//  Copyright (c) BridgeLabz Solution. All rights reserved.
-// </copyright>
-// <author>Mehboob Shaikh</author>
-//-----------------------------------------------------------------------
-[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
-namespace EmployeeCommonLayer
+namespace EmployeeCommonLayer.Model
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-
-    /// <summary>
-    ///  This class contains all the parameter used in User Table
-    /// </summary>
-    public class UserModel
+    public class LoginModel
     {
         /// <summary>
         /// Gets or sets the Employee Id
         /// </summary>
-        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeId { get; set; }
 
         /// <summary>
@@ -64,15 +57,5 @@ namespace EmployeeCommonLayer
         /// </summary>
         public DateTime RegistrationDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Updated Date
-        /// </summary>
-        public DateTime UpdationDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Password
-        /// </summary>
-        [RegularExpression("^.{8,30}$", ErrorMessage = "Password Length should be between 8 to 15")]
-        public string Password { get; set; }
     }
 }

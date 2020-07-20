@@ -9,11 +9,15 @@
 namespace EmployeeRepositoryLayer.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.IO;
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
+    using EmployeeCommonLayer.Model;
     using EmployeeRepositoryLayer.Interface;
+    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// This Class is used to implement the methods of interface
@@ -23,12 +27,19 @@ namespace EmployeeRepositoryLayer.Services
         /// <summary>
         /// It is an connection variable
         /// </summary>
-        private static string connectionVariable = "Server=DESKTOP-EUJ5D3D;Database=EmployeeDatabase;Trusted_Connection=true;MultipleActiveResultSets=True";
+        //private static string connectionVariable = "Server=DESKTOP-EUJ5D3D;Database=EmployeeDatabase;Trusted_Connection=true;MultipleActiveResultSets=True";
 
         /// <summary>
         /// It is an SQL connection object
         /// </summary>
-        private SqlConnection sqlConnection = new SqlConnection(connectionVariable);
+        // private SqlConnection sqlConnection = new SqlConnection(connectionVariable);
+
+        SqlConnection sqlConnection;
+        public UserRepository()
+        {
+            var configuration = this.GetConfiguration();
+            this.sqlConnection = new SqlConnection(configuration.GetSection("Data").GetSection("ConnectionString").Value);
+        }
 
         /// <summary>
         /// It creates the object of EncryptDecrypt class
@@ -45,10 +56,7 @@ namespace EmployeeRepositoryLayer.Services
             try
             {
                 // create the object of SqlCommand and send the command and connection object
-                SqlCommand sqlCommand = new SqlCommand("spUserRegister", this.sqlConnection);
-
-                // It defines the command type
-                sqlCommand.CommandType = CommandType.StoredProcedure;
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spUserRegister", this.sqlConnection);
 
                 // Add the First Name Value to database
                 sqlCommand.Parameters.AddWithValue("@FirstName", userModel.FirstName);
@@ -102,15 +110,17 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Login Successfully it returns true</returns>
-        public async Task<bool> UserLogin(UserModel userModel)
+        public IList<LoginModel> UserLogin(UserModel userModel)
         {
+            
             try
             {
-                // create the object of SqlCommand and send the command and connection object
-                SqlCommand sqlCommand = new SqlCommand("spUserLogin", this.sqlConnection);
+                LoginModel loginModel = new LoginModel();
+                // New Ilist is created to store the result 
+                IList<LoginModel> userModelList = new List<LoginModel>();
 
-                // It defines the command type
-                sqlCommand.CommandType = CommandType.StoredProcedure;
+                // create the object of SqlCommand and send the command and connection object
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spUserLogin", this.sqlConnection);
 
                 // Add the Email Id
                 sqlCommand.Parameters.AddWithValue("@EmailId", userModel.EmailId);
@@ -121,27 +131,75 @@ namespace EmployeeRepositoryLayer.Services
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
-                SqlDataReader sqlDataReader = await sqlCommand.ExecuteReaderAsync();
-                int status = 0;
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                int status = 1;
+               
                 while (sqlDataReader.Read())
                 {
                     status = sqlDataReader.GetInt32(0);
+
+                    if (status == 0)
+                    {
+                        return userModelList;
+                    }
+
+                    // Read the Employee Id and convert it into integer
+                    loginModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+
+                    // Read the First Name
+                    loginModel.FirstName = sqlDataReader["FirstName"].ToString();
+
+                    // Read the Last Name
+                    loginModel.LastName = sqlDataReader["LastName"].ToString();
+
+                    // Read the Email Id
+                    loginModel.EmailId = sqlDataReader["EmailId"].ToString();
+
+                    // Read the Gender
+                    loginModel.Gender = sqlDataReader["Gender"].ToString();
+
+                    // Read the Phone Number 
+                    loginModel.PhoneNumber = sqlDataReader["PhoneNumber"].ToString();
+
+                    // Read the City
+                    loginModel.City = sqlDataReader["City"].ToString();
+
+                    // Read the Registration date and convert into Date Time
+                    loginModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
+
+                    // Add all the data into Ilist
+                    userModelList.Add(loginModel);
                 }
 
+                // close Sql Connection
                 this.sqlConnection.Close();
-                if (status == 1)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+
+                // return the Ilist
+                return userModelList;
             }
             catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
+        }
+
+        private SqlCommand StoreProcedureConnection(string procedurename, SqlConnection connection)
+        {
+            using (SqlCommand command = new SqlCommand(procedurename, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                return command;
+            }
+        }
+
+        /// <summary>
+        /// configuration with database
+        /// </summary>
+        /// <returns>return builder</returns>
+        private IConfigurationRoot GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            return builder.Build();
         }
     }
 }

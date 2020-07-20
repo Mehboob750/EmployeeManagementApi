@@ -8,8 +8,10 @@
 
 namespace EmployeeRepositoryLayer.Interface
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
+    using EmployeeCommonLayer.Model;
 
     /// <summary>
     /// Interface of User Repository Layer
@@ -28,6 +30,6 @@ namespace EmployeeRepositoryLayer.Interface
         /// </summary>
         /// <param name="userModel">It is an object of User Model class</param>
         /// <returns>If Login Successfully it returns true</returns>
-        Task<bool> UserLogin(UserModel userModel);
+        IList<LoginModel> UserLogin(UserModel userModel);
     }
 }

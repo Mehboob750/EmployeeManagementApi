@@ -35,20 +35,20 @@ namespace EmployeeBuisenessLayer.Interface
         /// </summary>
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>If record is Updated it returns true</returns>
-        Task<bool> UpdateEmployee(EmployeeModel employeeModel);
+        Task<bool> UpdateEmployee(int employeeId, EmployeeModel employeeModel);
 
         /// <summary>
         /// It is an interface of Delete Employee Method
         /// </summary>
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>If record is Deleted it returns true</returns>
-        Task<bool> DeleteEmployee(EmployeeModel employeeModel);
+        IList<EmployeeModel> DeleteEmployee(int EmployeeId);
 
         /// <summary>
         /// It is an interface of Search Employee Method
         /// </summary>
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>It returns the search record</returns>
-        IList<EmployeeModel> SearchEmployee(EmployeeModel employeeModel);
+        IList<EmployeeModel> SearchEmployee(int EmployeeId);
     }
 }

@@ -9,6 +9,7 @@
 namespace EmployeeManagementApi.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
@@ -60,12 +61,12 @@ namespace EmployeeManagementApi.Controllers
                 {
                     bool status = false;
                     var message = "Fail To Register User";
-                    return this.BadRequest(new { status, message, data = "null" });
+                    return this.BadRequest(new { status, message });
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, data = "null" });
+                return this.BadRequest(new { status = false, message = e.Message});
             }
         }
 
@@ -76,31 +77,32 @@ namespace EmployeeManagementApi.Controllers
         /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
         [Route("userLogin")]
-        public async Task<IActionResult> UserLogin(UserModel userModel)
+        public IActionResult UserLogin(UserModel userModel)
         {
             try
             {
                 // Call the User Login Method of User Business classs
-                var response = await this.userBusiness.UserLogin(userModel);
+                var response =  this.userBusiness.UserLogin(userModel);
 
-                // check if response is equal to true
-                if (!response.Equals(false))
+                // check if response count is equal to 1
+                if (!response.Count.Equals(0))
                 {
                     bool status = true;
                     var message = "Login Successfully";
-                    return this.Ok(new { status, message, data = userModel });
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
                     bool status = false;
                     var message = "Fail To Login";
-                    return this.BadRequest(new { status, message, data = "null" });
+                    return this.BadRequest(new { status, message});
                 }
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.Message, data = "null" });
+                return this.BadRequest(new { status = false, message = e.Message});
             }
+            
         }
     }
 }

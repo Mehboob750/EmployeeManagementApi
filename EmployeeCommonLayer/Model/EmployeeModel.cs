@@ -10,6 +10,7 @@ namespace EmployeeCommonLayer
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Runtime.CompilerServices;
 
     /// <summary>
@@ -20,7 +21,8 @@ namespace EmployeeCommonLayer
         /// <summary>
         /// Gets or sets the Employee Id
         /// </summary>
-        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeId { get; set; }
 
         /// <summary>
@@ -40,7 +42,6 @@ namespace EmployeeCommonLayer
         /// <summary>
         /// Gets or sets the Gender of Employee
         /// </summary>
-        [RegularExpression("([a-zA-Z])$", ErrorMessage = "Gender is not valid")]
         public string Gender { get; set; }
 
         /// <summary>
@@ -58,7 +59,6 @@ namespace EmployeeCommonLayer
         /// <summary>
         /// Gets or sets the City Of Employee
         /// </summary>
-        [RegularExpression("([a-zA-Z])$", ErrorMessage = "City is not valid")]
         public string City { get; set; }
 
 

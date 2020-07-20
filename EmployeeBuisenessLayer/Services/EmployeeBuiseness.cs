@@ -43,25 +43,10 @@ namespace EmployeeBuisenessLayer.Services
         {
             try
             {
-                if (employeeModel != null)
-                {
-                    // Call the Add Employee Method of Employee Repository Class
-                    var response = await this.employeeRepository.AddEmployee(employeeModel);
+                // Call the Add Employee Method of Employee Repository Class
+                var response = await this.employeeRepository.AddEmployee(employeeModel);
+                return response;
 
-                    // Check response if equal returns true
-                    if (response == true)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
             }
             catch (Exception exception)
             {
@@ -92,14 +77,14 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record updated it return true</returns>
-        public async Task<bool> UpdateEmployee(EmployeeModel employeeModel)
+        public async Task<bool> UpdateEmployee(int EmployeeId,EmployeeModel employeeModel)
         {
             try
             {
                 if (employeeModel != null)
                 {
                     // Call the Update Employee Method of Employee Repository Class
-                    var response = await this.employeeRepository.UpdateEmployee(employeeModel);
+                    var response = await this.employeeRepository.UpdateEmployee(EmployeeId, employeeModel);
 
                     // Check response if equal returns true
                     if (response == true)
@@ -127,29 +112,13 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record deleted it return true</returns>
-        public async Task<bool> DeleteEmployee(EmployeeModel employeeModel)
+        public IList<EmployeeModel> DeleteEmployee(int EmployeeId)
         {
             try
             {
-                if (employeeModel != null)
-                {
-                    // Call the Delete Employee Method of Employee Repository Class
-                    var response = await this.employeeRepository.DeleteEmployee(employeeModel);
-
-                    // Check response if equal returns true
-                    if (response == true)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                // Call the Delete Employee Method of Employee Repository Class
+                var response = this.employeeRepository.DeleteEmployee(EmployeeId);
+                return response;
             }
             catch (Exception exception)
             {
@@ -162,12 +131,12 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>It returns the searched record</returns>
-        public IList<EmployeeModel> SearchEmployee(EmployeeModel employeeModel)
+        public IList<EmployeeModel> SearchEmployee(int EmployeeId)
         {
             try
             {
                 // Call the Search Employee Method of Employee Repository Class
-                var response = this.employeeRepository.SearchEmployee(employeeModel);
+                var response = this.employeeRepository.SearchEmployee(EmployeeId);
                 return response;
             }
             catch (Exception exception)

@@ -12,24 +12,23 @@ namespace EmployeeRepositoryLayer.Services
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.IO;
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
     using EmployeeRepositoryLayer.Interface;
+    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// This Class is used to implement the methods of interface
     /// </summary>
     public class EmployeeRepository : IEmployeeRepository
     {
-        /// <summary>
-        /// It is an connection variable
-        /// </summary>
-        private static string connectionVariable = "Server=DESKTOP-EUJ5D3D;Database=EmployeeDatabase;Trusted_Connection=true;MultipleActiveResultSets=True";
-
-        /// <summary>
-        /// It is an SQL connection object
-        /// </summary>
-        private SqlConnection sqlConnection = new SqlConnection(connectionVariable);
+        SqlConnection sqlConnection ;
+        public EmployeeRepository()
+        {
+            var configuration = this.GetConfiguration();
+            this.sqlConnection = new SqlConnection(configuration.GetSection("Data").GetSection("ConnectionString").Value);
+        }
 
         /// <summary>
         /// This Method is used to add new record 
@@ -40,11 +39,7 @@ namespace EmployeeRepositoryLayer.Services
         {
             try
             {
-                // create the object of SqlCommand and send the command and connection object
-                SqlCommand sqlCommand = new SqlCommand("spInsertRecord", this.sqlConnection);
-
-                // It defines the command type
-                sqlCommand.CommandType = CommandType.StoredProcedure;
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spInsertRecord", this.sqlConnection);
 
                 // Add the First Name Value to database
                 sqlCommand.Parameters.AddWithValue("@FirstName", employeeModel.FirstName);
@@ -99,10 +94,7 @@ namespace EmployeeRepositoryLayer.Services
                 IList<EmployeeModel> employeeModelsList = new List<EmployeeModel>();
 
                 // create the object of SqlCommand and send the command and connection object
-                SqlCommand sqlCommand = new SqlCommand("spReadRecord", this.sqlConnection);
-
-                // It defines the command type
-                sqlCommand.CommandType = CommandType.StoredProcedure;
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spReadRecord", this.sqlConnection);
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
@@ -161,18 +153,15 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record updated it return true</returns>
-        public async Task<bool> UpdateEmployee(EmployeeModel employeeModel)
+        public async Task<bool> UpdateEmployee(int EmployeeId,EmployeeModel employeeModel)
         {
             try
             {
                 // create the object of SqlCommand and send the command and connection object
-                SqlCommand sqlCommand = new SqlCommand("spUpdateRecord", this.sqlConnection);
-
-                // It defines the command type
-                sqlCommand.CommandType = CommandType.StoredProcedure;
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spUpdateRecord", this.sqlConnection);
 
                 // Add the Employee Id Value to database
-                sqlCommand.Parameters.AddWithValue("@EmployeeId", employeeModel.EmployeeId);
+                sqlCommand.Parameters.AddWithValue("@EmployeeId", EmployeeId);
 
                 // Add the First Name Value to database
                 sqlCommand.Parameters.AddWithValue("@FirstName", employeeModel.FirstName);
@@ -218,30 +207,28 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record deleted it return true</returns>
-        public async Task<bool> DeleteEmployee(EmployeeModel employeeModel)
+        public IList<EmployeeModel> DeleteEmployee(int EmployeeId)
         {
             try
             {
-                // create the object of SqlCommand and send the command and connection object
-                SqlCommand sqlCommand = new SqlCommand("spDeleteRecord", this.sqlConnection);
+                // New Ilist is created to store the result 
+                IList<EmployeeModel> employeeModelsList = new List<EmployeeModel>();
 
-                // It defines the command type
-                sqlCommand.CommandType = CommandType.StoredProcedure;
+                employeeModelsList = SearchEmployee(EmployeeId);
 
-                // Add the Employee Id Value 
-                sqlCommand.Parameters.AddWithValue("@EmployeeId", employeeModel.EmployeeId);
-
-                // Opens the Sql Connection
-                this.sqlConnection.Open();
-                var response = await sqlCommand.ExecuteNonQueryAsync();
-                if (response > 0)
+                if (employeeModelsList.Count.Equals(1))
                 {
-                    return true;
+                    // create the object of SqlCommand and send the command and connection object
+                    SqlCommand sqlCommand = this.StoreProcedureConnection("spDeleteRecord", this.sqlConnection);
+
+                    // Add the Employee Id Value 
+                    sqlCommand.Parameters.AddWithValue("@EmployeeId", EmployeeId);
+
+                    // Opens the Sql Connection
+                    this.sqlConnection.Open();
+                    var response = sqlCommand.ExecuteNonQueryAsync();
                 }
-                else
-                {
-                    return false;
-                }
+                return employeeModelsList;
             }
             catch (Exception exception)
             {
@@ -258,7 +245,7 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>It returns the searched record</returns>
-        public IList<EmployeeModel> SearchEmployee(EmployeeModel employeeModel)
+        public IList<EmployeeModel> SearchEmployee(int EmployeeId)
         {
             try
             {
@@ -266,13 +253,18 @@ namespace EmployeeRepositoryLayer.Services
                 IList<EmployeeModel> employeeModelsList = new List<EmployeeModel>();
 
                 // create the object of SqlCommand and send the command and connection object
-                SqlCommand sqlCommand = new SqlCommand("spSearchEmployee", this.sqlConnection);
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spSearchEmployee", this.sqlConnection);
 
-                // It defines the command type
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-
-                // Add the Employee Id Value 
-                sqlCommand.Parameters.AddWithValue("@EmployeeId", employeeModel.EmployeeId);
+                if (EmployeeId > 0)
+                {
+                    // Add the Employee Id Value 
+                    sqlCommand.Parameters.AddWithValue("@EmployeeId", EmployeeId);
+                }
+                else
+                {
+                    sqlCommand.Parameters.AddWithValue("@EmployeeId", EmployeeId);
+                   // sqlCommand.Parameters.AddWithValue("@EmailId", EmailId);
+                }
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
@@ -280,6 +272,7 @@ namespace EmployeeRepositoryLayer.Services
                 // Read the employee data from database using SqlDataReader
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
+                EmployeeModel employeeModel = new EmployeeModel();
                 // Data is read upto data is present 
                 while (sqlDataReader.Read())
                 {
@@ -322,5 +315,21 @@ namespace EmployeeRepositoryLayer.Services
                 throw new Exception(exception.Message);
             }
         }
+
+        private IConfigurationRoot GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            return builder.Build();
+        }
+
+        private SqlCommand StoreProcedureConnection(string procedureName, SqlConnection connection)
+        {
+            using (SqlCommand command = new SqlCommand(procedureName, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                return command;
+            }
+        }
+
     }
 }
