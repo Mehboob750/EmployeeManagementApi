@@ -12,6 +12,7 @@ namespace EmployeeRepositoryLayer.Interface
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.Model;
+    using EmployeeCommonLayer.RequestModel;
 
     /// <summary>
     /// Interface of User Repository Layer
@@ -23,13 +24,13 @@ namespace EmployeeRepositoryLayer.Interface
         /// </summary>
         /// <param name="userModel">It is an object of User Model class</param>
         /// <returns>If register successfully it returns true</returns>
-        Task<bool> UserRegistration(UserModel userModel);
+        Task<bool> UserRegistration(RegistrationModel registrationModel);
 
         /// <summary>
         ///  It is an interface of User Login Method
         /// </summary>
         /// <param name="userModel">It is an object of User Model class</param>
         /// <returns>If Login Successfully it returns true</returns>
-        IList<LoginModel> UserLogin(UserModel userModel);
+        IList<LoginModel> UserLogin(UserLoginModel userLoginModel);
     }
 }

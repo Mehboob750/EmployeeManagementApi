@@ -14,6 +14,7 @@ namespace EmployeeBuisenessLayer.Services
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.Model;
+    using EmployeeCommonLayer.RequestModel;
     using EmployeeRepositoryLayer.Interface;
 
     /// <summary>
@@ -40,14 +41,14 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Registered Successfully it returns true</returns>
-        public async Task<bool> UserRegistration(UserModel userModel)
+        public async Task<bool> UserRegistration(RegistrationModel registrationModel)
         {
             try
             {
-                if (userModel != null)
+                if (registrationModel != null)
                 {
                     // Call the User Registration Method of User Repository Class
-                    var response = await this.userRepository.UserRegistration(userModel);
+                    var response = await this.userRepository.UserRegistration(registrationModel);
 
                     // check response if equal returns true
                     if (response == true)
@@ -75,12 +76,12 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Login Successfully it returns true</returns>
-        public IList<LoginModel> UserLogin(UserModel userModel)
+        public IList<LoginModel> UserLogin(UserLoginModel userLoginModel)
         {
             try
             {
                 // Call the User Login Method of User Repository Class
-                var response = this.userRepository.UserLogin(userModel);
+                var response = this.userRepository.UserLogin(userLoginModel);
                 return response;
             }
             catch (Exception exception)

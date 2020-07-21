@@ -12,6 +12,7 @@ namespace EmployeeManagement.Controllers
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -19,6 +20,7 @@ namespace EmployeeManagement.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeeController : ControllerBase
     {
         /// <summary>

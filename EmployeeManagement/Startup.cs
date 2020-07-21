@@ -8,16 +8,20 @@
 
 namespace EmployeeManagement
 {
+    using System.Collections.Generic;
+    using System.Text;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeBuisenessLayer.Services;
     using EmployeeRepositoryLayer.Interface;
     using EmployeeRepositoryLayer.Services;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
     using Swashbuckle.AspNetCore.Swagger;
 
     /// <summary>
@@ -45,18 +49,51 @@ namespace EmployeeManagement
         /// <param name="services">It contains the services</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            /*services.AddCors(options =>
+
+            var key = Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = false;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1.0", new Info { Title = "Employee Management API", Version="v1.0", Description = "Swagger Employee Management API" });
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+
+                c.AddSecurityRequirement(
+                    new Dictionary<string, IEnumerable<string>>
+                    { { "Bearer", new string[]{ } }
+                    });
+            });
+
+            services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
                     builder => builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
-            });*/
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "Employee Management API", Description = "Swagger Employee Management API" });
             });
 
             // Add application service for Employee Business Layer
@@ -89,18 +126,13 @@ namespace EmployeeManagement
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseMvc();
-            //app.UseCors("CorsPolicy");
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            //app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(
-                c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API"); });
+                c => { c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Core API"); });
+            app.UseAuthentication();
+            app.UseMvc();
         }
     }
 }

@@ -57,5 +57,6 @@ namespace EmployeeCommonLayer.Model
         /// </summary>
         public DateTime RegistrationDate { get; set; }
 
+        public DateTime LoginTime { get; set; }
     }
 }

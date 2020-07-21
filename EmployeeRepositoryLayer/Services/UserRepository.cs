@@ -16,6 +16,7 @@ namespace EmployeeRepositoryLayer.Services
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.Model;
+    using EmployeeCommonLayer.RequestModel;
     using EmployeeRepositoryLayer.Interface;
     using Microsoft.Extensions.Configuration;
 
@@ -51,7 +52,7 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Registered Successfully it returns true</returns>
-        public async Task<bool> UserRegistration(UserModel userModel)
+        public async Task<bool> UserRegistration(RegistrationModel registrationModel)
         {
             try
             {
@@ -59,28 +60,28 @@ namespace EmployeeRepositoryLayer.Services
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spUserRegister", this.sqlConnection);
 
                 // Add the First Name Value to database
-                sqlCommand.Parameters.AddWithValue("@FirstName", userModel.FirstName);
+                sqlCommand.Parameters.AddWithValue("@FirstName", registrationModel.FirstName);
 
                 // Add the Last Name Value to database
-                sqlCommand.Parameters.AddWithValue("@LastName", userModel.LastName);
+                sqlCommand.Parameters.AddWithValue("@LastName", registrationModel.LastName);
 
                 // Add the Gender Value to database
-                sqlCommand.Parameters.AddWithValue("@Gender", userModel.Gender);
+                sqlCommand.Parameters.AddWithValue("@Gender", registrationModel.Gender);
 
                 // Add the Email Id Value to database
-                sqlCommand.Parameters.AddWithValue("@EmailId", userModel.EmailId);
+                sqlCommand.Parameters.AddWithValue("@EmailId", registrationModel.EmailId);
 
                 // Add the Phone Number Value to database
-                sqlCommand.Parameters.AddWithValue("@PhoneNumber", userModel.PhoneNumber);
+                sqlCommand.Parameters.AddWithValue("@PhoneNumber", registrationModel.PhoneNumber);
 
                 // Add the City Value to database
-                sqlCommand.Parameters.AddWithValue("@City", userModel.City);
+                sqlCommand.Parameters.AddWithValue("@City", registrationModel.City);
 
                 // Add the Registration Date to database
                 sqlCommand.Parameters.AddWithValue("@RegistrationDate", DateTime.Now);
 
                 // this varibale strores the Encrypted password
-                string password = this.encryptDecrypt.EncodePasswordToBase64(userModel.Password);
+                string password = this.encryptDecrypt.EncodePasswordToBase64(registrationModel.Password);
 
                 // Add the Encrypted password to database
                 sqlCommand.Parameters.AddWithValue("@Password", password);
@@ -110,7 +111,7 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Login Successfully it returns true</returns>
-        public IList<LoginModel> UserLogin(UserModel userModel)
+        public IList<LoginModel> UserLogin(UserLoginModel userLoginModel)
         {
             
             try
@@ -123,8 +124,8 @@ namespace EmployeeRepositoryLayer.Services
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spUserLogin", this.sqlConnection);
 
                 // Add the Email Id
-                sqlCommand.Parameters.AddWithValue("@EmailId", userModel.EmailId);
-                string password = this.encryptDecrypt.EncodePasswordToBase64(userModel.Password);
+                sqlCommand.Parameters.AddWithValue("@EmailId", userLoginModel.EmailId);
+                string password = this.encryptDecrypt.EncodePasswordToBase64(userLoginModel.Password);
 
                 // Add the Encrypted password
                 sqlCommand.Parameters.AddWithValue("@Password", password);
@@ -166,6 +167,8 @@ namespace EmployeeRepositoryLayer.Services
 
                     // Read the Registration date and convert into Date Time
                     loginModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
+
+                    loginModel.LoginTime = Convert.ToDateTime(DateTime.Now);
 
                     // Add all the data into Ilist
                     userModelList.Add(loginModel);
