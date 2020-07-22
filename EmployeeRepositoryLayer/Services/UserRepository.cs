@@ -145,7 +145,7 @@ namespace EmployeeRepositoryLayer.Services
                     }
 
                     // Read the Employee Id and convert it into integer
-                    loginModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+                    loginModel.Id = Convert.ToInt32(sqlDataReader["EmployeeId"]);
 
                     // Read the First Name
                     loginModel.FirstName = sqlDataReader["FirstName"].ToString();

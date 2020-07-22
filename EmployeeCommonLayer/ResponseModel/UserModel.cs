@@ -22,7 +22,7 @@ namespace EmployeeCommonLayer
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmployeeId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the First name

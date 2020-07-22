@@ -17,6 +17,7 @@ namespace EmployeeManagementApi.Controllers
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.RequestModel;
+    using EmployeeManagement.Sender;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -36,6 +37,8 @@ namespace EmployeeManagementApi.Controllers
         private readonly IUserBuiseness userBusiness;
 
         IConfiguration configuration;
+
+        Sender sender = new Sender();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
@@ -67,6 +70,8 @@ namespace EmployeeManagementApi.Controllers
                 {
                     bool status = true;
                     var message = "User Registered Successfully";
+                    string msmqData = Convert.ToString(registrationModel.FirstName) + Convert.ToString(registrationModel.LastName) + "\n" + message + "\n Email : " + Convert.ToString(registrationModel.EmailId) + "\n Password : " + Convert.ToString(registrationModel.Password);
+                    sender.Message(msmqData);
                     return this.Ok(new { status, message, data = registrationModel });
                 }
                 else
