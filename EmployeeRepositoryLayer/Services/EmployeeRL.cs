@@ -15,6 +15,7 @@ namespace EmployeeRepositoryLayer.Services
     using System.IO;
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
+    using EmployeeCommonLayer.RequestModel;
     using EmployeeRepositoryLayer.Interface;
     using Microsoft.Extensions.Configuration;
 
@@ -35,46 +36,66 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="employeeModel">It is an object of Employee model class</param>
         /// <returns>If record added successfully it returns true</returns>
-        public async Task<bool> AddEmployee(EmployeeModel employeeModel)
+        public EmployeeResponseModel AddEmployee(EmployeeRequestModel employeeRequestModel)
         {
             try
             {
+                EmployeeResponseModel employeeResponseModel = new EmployeeResponseModel();
+
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spInsertRecord", this.sqlConnection);
 
                 // Add the First Name Value to database
-                sqlCommand.Parameters.AddWithValue("@FirstName", employeeModel.FirstName);
+                sqlCommand.Parameters.AddWithValue("@FirstName", employeeRequestModel.FirstName);
 
                 // Add the Last Name Value to database
-                sqlCommand.Parameters.AddWithValue("@LastName", employeeModel.LastName);
+                sqlCommand.Parameters.AddWithValue("@LastName", employeeRequestModel.LastName);
 
                 // Add the Gender Value to database
-                sqlCommand.Parameters.AddWithValue("@Gender", employeeModel.Gender);
+                sqlCommand.Parameters.AddWithValue("@Gender", employeeRequestModel.Gender);
 
                 // Add the Email Id Value to database
-                sqlCommand.Parameters.AddWithValue("@EmailId", employeeModel.EmailId);
+                sqlCommand.Parameters.AddWithValue("@EmailId", employeeRequestModel.EmailId);
 
                 // Add the Phone Number Value to database
-                sqlCommand.Parameters.AddWithValue("@PhoneNumber", employeeModel.PhoneNumber);
+                sqlCommand.Parameters.AddWithValue("@PhoneNumber", employeeRequestModel.PhoneNumber);
 
                 // Add the City Value to database
-                sqlCommand.Parameters.AddWithValue("@City", employeeModel.City);
-
-                // Add the Registration Date to database
-                sqlCommand.Parameters.AddWithValue("@RegistrationDate", DateTime.Now);
+                sqlCommand.Parameters.AddWithValue("@City", employeeRequestModel.City);
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
-                var response = await sqlCommand.ExecuteNonQueryAsync();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    // Read the Employee Id and convert it into integer
+                    employeeResponseModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
 
-                // Check Response
-                if (response > 0)
-                {
-                    return true;
+                    // Read the First Name
+                    employeeResponseModel.FirstName = sqlDataReader["FirstName"].ToString();
+
+                    // Read the Last Name
+                    employeeResponseModel.LastName = sqlDataReader["LastName"].ToString();
+
+                    // Read the Email Id
+                    employeeResponseModel.EmailId = sqlDataReader["EmailId"].ToString();
+
+                    // Read the Gender
+                    employeeResponseModel.Gender = sqlDataReader["Gender"].ToString();
+
+                    // Read the Phone Number 
+                    employeeResponseModel.PhoneNumber = sqlDataReader["PhoneNumber"].ToString();
+
+                    // Read the City
+                    employeeResponseModel.City = sqlDataReader["City"].ToString();
+
+                    // Read the Registration date and convert into Date Time
+                    employeeResponseModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
                 }
-                else
-                {
-                    return false;
-                }
+
+                // close Sql Connection
+                this.sqlConnection.Close();
+
+                return employeeResponseModel;
             }
             catch (Exception e)
             {
@@ -86,12 +107,12 @@ namespace EmployeeRepositoryLayer.Services
         /// This Method is used to Read all Record
         /// </summary>
         /// <returns>It returns the all record</returns>
-        public IList<EmployeeModel> ReadEmployee()
+        public IList<EmployeeResponseModel> ReadEmployee()
         {
             try
             {
                 // New Ilist is created to store the result 
-                IList<EmployeeModel> employeeModelsList = new List<EmployeeModel>();
+                IList<EmployeeResponseModel> employeeModelsList = new List<EmployeeResponseModel>();
 
                 // create the object of SqlCommand and send the command and connection object
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spReadRecord", this.sqlConnection);
@@ -106,7 +127,7 @@ namespace EmployeeRepositoryLayer.Services
                 while (sqlDataReader.Read())
                 {
                     // Create the object of Employee Model Class 
-                    EmployeeModel employeeModel = new EmployeeModel();
+                    EmployeeResponseModel employeeModel = new EmployeeResponseModel();
 
                     // Read the Employee Id and convert it into integer
                     employeeModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
@@ -153,10 +174,11 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record updated it return true</returns>
-        public async Task<bool> UpdateEmployee(int EmployeeId,EmployeeModel employeeModel)
+        public EmployeeResponseModel UpdateEmployee(int EmployeeId, EmployeeRequestModel employeeModel)
         {
             try
             {
+                EmployeeResponseModel employeeResponseModel = new EmployeeResponseModel();
                 // create the object of SqlCommand and send the command and connection object
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spUpdateRecord", this.sqlConnection);
 
@@ -182,19 +204,44 @@ namespace EmployeeRepositoryLayer.Services
                 sqlCommand.Parameters.AddWithValue("@City", employeeModel.City);
 
                 // Add the Updated Date to database
-                sqlCommand.Parameters.AddWithValue("@UpdationDate", DateTime.Now);
+               // sqlCommand.Parameters.AddWithValue("@UpdationDate", DateTime.Now);
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
-                var response = await sqlCommand.ExecuteNonQueryAsync();
-                if (response > 0)
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                while (sqlDataReader.Read())
                 {
-                    return true;
+                    // Read the Employee Id and convert it into integer
+                    employeeResponseModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+
+                    // Read the First Name
+                    employeeResponseModel.FirstName = sqlDataReader["FirstName"].ToString();
+
+                    // Read the Last Name
+                    employeeResponseModel.LastName = sqlDataReader["LastName"].ToString();
+
+                    // Read the Email Id
+                    employeeResponseModel.EmailId = sqlDataReader["EmailId"].ToString();
+
+                    // Read the Gender
+                    employeeResponseModel.Gender = sqlDataReader["Gender"].ToString();
+
+                    // Read the Phone Number 
+                    employeeResponseModel.PhoneNumber = sqlDataReader["PhoneNumber"].ToString();
+
+                    // Read the City
+                    employeeResponseModel.City = sqlDataReader["City"].ToString();
+
+                    // Read the Registration date and convert into Date Time
+                    employeeResponseModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
+                    
+                    employeeResponseModel.UpdationDate = Convert.ToDateTime(sqlDataReader["UpdationDate"]);
                 }
-                else
-                {
-                    return false;
-                }
+
+                // close Sql Connection
+                this.sqlConnection.Close();
+
+                return employeeResponseModel;
             }
             catch (Exception exception)
             {
@@ -207,16 +254,14 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record deleted it return true</returns>
-        public IList<EmployeeModel> DeleteEmployee(int EmployeeId)
+        public EmployeeResponseModel DeleteEmployee(int EmployeeId)
         {
             try
             {
                 // New Ilist is created to store the result 
-                IList<EmployeeModel> employeeModelsList = new List<EmployeeModel>();
+                EmployeeResponseModel employeeResponseModel = new EmployeeResponseModel();
 
-                employeeModelsList = SearchEmployee(EmployeeId);
-
-                if (employeeModelsList.Count.Equals(1))
+                if (!EmployeeId.Equals(0))
                 {
                     // create the object of SqlCommand and send the command and connection object
                     SqlCommand sqlCommand = this.StoreProcedureConnection("spDeleteRecord", this.sqlConnection);
@@ -226,9 +271,35 @@ namespace EmployeeRepositoryLayer.Services
 
                     // Opens the Sql Connection
                     this.sqlConnection.Open();
-                    var response = sqlCommand.ExecuteNonQueryAsync();
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                    while (sqlDataReader.Read())
+                    {
+                        // Read the Employee Id and convert it into integer
+                        employeeResponseModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+
+                        // Read the First Name
+                        employeeResponseModel.FirstName = sqlDataReader["FirstName"].ToString();
+
+                        // Read the Last Name
+                        employeeResponseModel.LastName = sqlDataReader["LastName"].ToString();
+
+                        // Read the Email Id
+                        employeeResponseModel.EmailId = sqlDataReader["EmailId"].ToString();
+
+                        // Read the Gender
+                        employeeResponseModel.Gender = sqlDataReader["Gender"].ToString();
+
+                        // Read the Phone Number 
+                        employeeResponseModel.PhoneNumber = sqlDataReader["PhoneNumber"].ToString();
+
+                        // Read the City
+                        employeeResponseModel.City = sqlDataReader["City"].ToString();
+
+                        // Read the Registration date and convert into Date Time
+                        employeeResponseModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
+                    }
                 }
-                return employeeModelsList;
+                return employeeResponseModel;
             }
             catch (Exception exception)
             {
@@ -240,17 +311,18 @@ namespace EmployeeRepositoryLayer.Services
             }
         }
 
+
         /// <summary>
         ///  This Method is used to Search the Record
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>It returns the searched record</returns>
-        public IList<EmployeeModel> SearchEmployee(int EmployeeId)
+        public EmployeeResponseModel SearchEmployee(int EmployeeId)
         {
             try
             {
                 // New Ilist is created to store the result 
-                IList<EmployeeModel> employeeModelsList = new List<EmployeeModel>();
+                //IList<EmployeeResponseModel> employeeModelsList = new List<EmployeeResponseModel>();
 
                 // create the object of SqlCommand and send the command and connection object
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spSearchEmployee", this.sqlConnection);
@@ -272,7 +344,7 @@ namespace EmployeeRepositoryLayer.Services
                 // Read the employee data from database using SqlDataReader
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
-                EmployeeModel employeeModel = new EmployeeModel();
+                EmployeeResponseModel employeeModel = new EmployeeResponseModel();
                 // Data is read upto data is present 
                 while (sqlDataReader.Read())
                 {
@@ -301,14 +373,14 @@ namespace EmployeeRepositoryLayer.Services
                     employeeModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
 
                     // Add all the data into Ilist
-                    employeeModelsList.Add(employeeModel);
+                   // employeeModelsList.Add(employeeModel);
                 }
 
                 // close Sql Connection
                 this.sqlConnection.Close();
 
                 // return the Ilist
-                return employeeModelsList;
+                return employeeModel;
             }
             catch (Exception exception)
             {

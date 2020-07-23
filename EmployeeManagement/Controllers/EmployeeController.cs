@@ -12,6 +12,7 @@ namespace EmployeeManagement.Controllers
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
+    using EmployeeCommonLayer.RequestModel;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace EmployeeManagement.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class EmployeeController : ControllerBase
     {
         /// <summary>
@@ -43,7 +44,7 @@ namespace EmployeeManagement.Controllers
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
-        public IActionResult AddEmployee([FromBody] EmployeeModel employeeModel)
+        public IActionResult AddEmployee([FromBody] EmployeeRequestModel employeeModel)
         {
             try
             {
@@ -55,7 +56,7 @@ namespace EmployeeManagement.Controllers
                 {
                     bool status = true;
                     var message = "Data Added Successfully";
-                    return this.Ok(new { status, message, data = employeeModel });
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
@@ -108,19 +109,18 @@ namespace EmployeeManagement.Controllers
         /// <param name="employeeModel">It is an object of Employee Model class</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPut("{EmployeeId}")]
-        public async Task<IActionResult> UpdateEmployee([FromRoute] int EmployeeId, [FromBody] EmployeeModel employeeModel)
+        public IActionResult UpdateEmployee([FromRoute] int EmployeeId, [FromBody] EmployeeRequestModel employeeModel)
         {
             try
             {
                 // Call the Update Employee Method of Employee Business classs
-                var response = await this.employeeBusiness.UpdateEmployee(EmployeeId, employeeModel);
-
+                var response = this.employeeBusiness.UpdateEmployee(EmployeeId, employeeModel);
                 // check if response is equal to true
-                if (!response.Equals(false))
+                if (!response.EmployeeId.Equals(0))
                 {
                     bool status = true;
                     var message = "Data Updated Successfully";
-                    return this.Ok(new { status, message, data = employeeModel });
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
@@ -149,7 +149,7 @@ namespace EmployeeManagement.Controllers
                 var response =  this.employeeBusiness.DeleteEmployee(EmployeeId);
 
                 // check if response is equal to true
-                if (!response.Count.Equals(0))
+                if (!response.EmployeeId.Equals(0))
                 {
                     bool status = true;
                     var message = "Deleted Successfully";
@@ -182,7 +182,7 @@ namespace EmployeeManagement.Controllers
                 var response = this.employeeBusiness.SearchEmployee(EmployeeId);
 
                 // check if response count is equal to 1
-                if (!response.Count.Equals(0))
+                if (!response.EmployeeId.Equals(0))
                 {
                     bool status = true;
                     var message = "Record Found";

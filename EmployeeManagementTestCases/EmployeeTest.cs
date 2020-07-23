@@ -25,7 +25,7 @@ namespace EmployeeManagementTestCases
         [Fact]
         public void GivenAddEmployee_WhenCalled_ShouldReturnOkResult()
         {
-            var testData = new EmployeeModel
+            var testData = new EmployeeResponseModel
             { FirstName = "Akshay", LastName = "Kumar", Gender = "Male", EmailId = "akshay123@gmail.com", PhoneNumber = "9874516300", City = "Pune" };
 
             var data = employeeController.AddEmployee(testData);

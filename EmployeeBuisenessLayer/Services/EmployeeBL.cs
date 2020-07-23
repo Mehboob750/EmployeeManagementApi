@@ -13,6 +13,7 @@ namespace EmployeeBuisenessLayer.Services
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
+    using EmployeeCommonLayer.RequestModel;
     using EmployeeRepositoryLayer.Interface;
 
     /// <summary>
@@ -39,12 +40,12 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record added it return true</returns>
-        public async Task<bool> AddEmployee(EmployeeModel employeeModel)
+        public EmployeeResponseModel AddEmployee(EmployeeRequestModel employeeModel)
         {
             try
             {
                 // Call the Add Employee Method of Employee Repository Class
-                var response = await this.employeeRepository.AddEmployee(employeeModel);
+                var response = this.employeeRepository.AddEmployee(employeeModel);
                 return response;
 
             }
@@ -58,7 +59,7 @@ namespace EmployeeBuisenessLayer.Services
         /// This Method is used to Read all Record
         /// </summary>
         /// <returns>It returns the all record</returns>
-        public IList<EmployeeModel> ReadEmployee()
+        public IList<EmployeeResponseModel> ReadEmployee()
         {
             try
             {
@@ -77,29 +78,13 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record updated it return true</returns>
-        public async Task<bool> UpdateEmployee(int EmployeeId,EmployeeModel employeeModel)
+        public EmployeeResponseModel UpdateEmployee(int EmployeeId, EmployeeRequestModel employeeModel)
         {
             try
             {
-                if (employeeModel != null)
-                {
-                    // Call the Update Employee Method of Employee Repository Class
-                    var response = await this.employeeRepository.UpdateEmployee(EmployeeId, employeeModel);
-
-                    // Check response if equal returns true
-                    if (response == true)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                // Call the Delete Employee Method of Employee Repository Class
+                var response = this.employeeRepository.UpdateEmployee(EmployeeId, employeeModel);
+                return response;
             }
             catch (Exception exception)
             {
@@ -112,7 +97,7 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>If record deleted it return true</returns>
-        public IList<EmployeeModel> DeleteEmployee(int EmployeeId)
+        public EmployeeResponseModel DeleteEmployee(int EmployeeId)
         {
             try
             {
@@ -131,7 +116,7 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="employeeModel">It contains the Object of Employee Model</param>
         /// <returns>It returns the searched record</returns>
-        public IList<EmployeeModel> SearchEmployee(int EmployeeId)
+        public EmployeeResponseModel SearchEmployee(int EmployeeId)
         {
             try
             {
