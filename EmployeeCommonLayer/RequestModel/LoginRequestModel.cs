@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EmployeeCommonLayer.RequestModel
 {
-    public class UserLoginModel
+    public class LoginRequestModel
     {
         /// <summary>
         /// Gets or sets the EmailId

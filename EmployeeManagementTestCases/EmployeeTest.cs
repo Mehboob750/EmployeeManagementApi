@@ -12,13 +12,13 @@ namespace EmployeeManagementTestCases
     public class EmployeeTest
     {
         EmployeeController employeeController;
-        IEmployeeBuiseness employeeBuiseness;
-        IEmployeeRepository employeeRepository;
+        IEmployeeBL employeeBuiseness;
+        IEmployeeRL employeeRepository;
 
         public EmployeeTest()
         {
-            employeeRepository = new EmployeeRepository();
-            employeeBuiseness = new EmployeeBuiseness(employeeRepository);
+            employeeRepository = new EmployeeRL();
+            employeeBuiseness = new EmployeeBL(employeeRepository);
             employeeController = new EmployeeController(employeeBuiseness);
         }
 

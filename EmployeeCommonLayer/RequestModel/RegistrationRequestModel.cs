@@ -5,59 +5,55 @@ using System.Text;
 
 namespace EmployeeCommonLayer.RequestModel
 {
-    public class RegistrationModel
+    public class RegistrationRequestModel
     {
         /// <summary>
         /// Gets or sets the First name
         /// </summary>
-        [StringLength(maximumLength: 20, MinimumLength = 3,
-         ErrorMessage = "The property {0} should have {1} maximum characters and {2} minimum characters")]
+        [Required]
+        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "First Name is not valid")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the Last name
         /// </summary>
-        [StringLength(maximumLength: 20, MinimumLength = 3,
-         ErrorMessage = "The property {0} should have {1} maximum characters and {2} minimum characters")]
+        [Required]
+        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "Last Name is not valid")]
         public string LastName { get; set; }
 
         /// <summary>
         /// Gets or sets the Gender
         /// </summary>
+        [Required]
+        [RegularExpression("(?:m|M|male|Male|f|F|female|Female)$", ErrorMessage = "Gender is not valid")]
         public string Gender { get; set; }
 
         /// <summary>
         /// Gets or sets the EmailId
         /// </summary>
+        [Required]
         [RegularExpression("^[0-9a-zA-Z]+([._+-][0-9a-zA-Z]+)*@[0-9a-zA-Z]+.[a-zA-Z]{2,4}([.][a-zA-Z]{2,3})?$", ErrorMessage = "EmailId is not valid")]
         public string EmailId { get; set; }
-
-        [RegularExpression("([1-9]{1}[0-9]{9})$", ErrorMessage = "Phone number is not valid")]
 
         /// <summary>
         /// Gets or sets the Phone Number
         /// </summary>
+        [RegularExpression("([1-9]{1}[0-9]{9})$", ErrorMessage = "Phone number is not valid")]
+        [Required]
         public string PhoneNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the City
         /// </summary>
+        [Required]
+        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "City is not valid")]
         public string City { get; set; }
 
         /// <summary>
         /// Gets or sets the Password
         /// </summary>
         [RegularExpression("^.{8,30}$", ErrorMessage = "Password Length should be between 8 to 15")]
+        [Required]
         public string Password { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Registration Date
-        /// </summary>
-        public DateTime RegistrationDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Updated Date
-        /// </summary>
-        public DateTime UpdationDate { get; set; }
     }
 }

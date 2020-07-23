@@ -17,13 +17,14 @@ namespace EmployeeRepositoryLayer.Services
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.Model;
     using EmployeeCommonLayer.RequestModel;
+    using EmployeeCommonLayer.ResponseModel;
     using EmployeeRepositoryLayer.Interface;
     using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// This Class is used to implement the methods of interface
     /// </summary>
-    public class UserRepository : IUserRepository
+    public class UserRL : IUserRL
     {
         /// <summary>
         /// It is an connection variable
@@ -36,7 +37,7 @@ namespace EmployeeRepositoryLayer.Services
         // private SqlConnection sqlConnection = new SqlConnection(connectionVariable);
 
         SqlConnection sqlConnection;
-        public UserRepository()
+        public UserRL()
         {
             var configuration = this.GetConfiguration();
             this.sqlConnection = new SqlConnection(configuration.GetSection("Data").GetSection("ConnectionString").Value);
@@ -52,10 +53,12 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Registered Successfully it returns true</returns>
-        public async Task<bool> UserRegistration(RegistrationModel registrationModel)
+        public IList<RegistrationResponseModel> UserRegistration(RegistrationRequestModel registrationModel)
         {
             try
             {
+                RegistrationResponseModel responseModel = new RegistrationResponseModel();
+                IList<RegistrationResponseModel> userModelList = new List<RegistrationResponseModel>();
                 // create the object of SqlCommand and send the command and connection object
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spUserRegister", this.sqlConnection);
 
@@ -78,7 +81,7 @@ namespace EmployeeRepositoryLayer.Services
                 sqlCommand.Parameters.AddWithValue("@City", registrationModel.City);
 
                 // Add the Registration Date to database
-                sqlCommand.Parameters.AddWithValue("@RegistrationDate", DateTime.Now);
+                //sqlCommand.Parameters.AddWithValue("@RegistrationDate", DateTime.Now);
 
                 // this varibale strores the Encrypted password
                 string password = this.encryptDecrypt.EncodePasswordToBase64(registrationModel.Password);
@@ -88,17 +91,46 @@ namespace EmployeeRepositoryLayer.Services
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
-                var response = await sqlCommand.ExecuteNonQueryAsync();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    // Read the Employee Id and convert it into integer
+                    responseModel.Id = Convert.ToInt32(sqlDataReader["EmployeeId"]);
 
-                // Check Response
-                if (response > 0)
-                {
-                    return true;
+                    // Read the First Name
+                    responseModel.FirstName = sqlDataReader["FirstName"].ToString();
+
+                    // Read the Last Name
+                    responseModel.LastName = sqlDataReader["LastName"].ToString();
+
+                    // Read the Email Id
+                    responseModel.EmailId = sqlDataReader["EmailId"].ToString();
+
+                    // Read the Gender
+                    responseModel.Gender = sqlDataReader["Gender"].ToString();
+
+                    // Read the Phone Number 
+                    responseModel.PhoneNumber = sqlDataReader["PhoneNumber"].ToString();
+
+                    // Read the City
+                    responseModel.City = sqlDataReader["City"].ToString();
+
+                    responseModel.Password = sqlDataReader["Password"].ToString();
+
+                    // Read the Registration date and convert into Date Time
+                    responseModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
+                   
+                    //responseModel.UpdationDate = Convert.ToDateTime(sqlDataReader["UpdationDate"]);
+
+                    // Add all the data into Ilist
+                    userModelList.Add(responseModel);
                 }
-                else
-                {
-                    return false;
-                }
+
+                // close Sql Connection
+                this.sqlConnection.Close();
+
+                // return the Ilist
+                return userModelList;
             }
             catch (Exception e)
             {
@@ -111,14 +143,14 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Login Successfully it returns true</returns>
-        public IList<LoginModel> UserLogin(UserLoginModel userLoginModel)
+        public LoginResponseModel UserLogin(LoginRequestModel userLoginModel)
         {
             
             try
             {
-                LoginModel loginModel = new LoginModel();
+                LoginResponseModel loginModel = new LoginResponseModel();
                 // New Ilist is created to store the result 
-                IList<LoginModel> userModelList = new List<LoginModel>();
+               // IList<LoginResponseModel> userModelList = new List<LoginResponseModel>();
 
                 // create the object of SqlCommand and send the command and connection object
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spUserLogin", this.sqlConnection);
@@ -141,7 +173,7 @@ namespace EmployeeRepositoryLayer.Services
 
                     if (status == 0)
                     {
-                        return userModelList;
+                        return loginModel;
                     }
 
                     // Read the Employee Id and convert it into integer
@@ -171,14 +203,13 @@ namespace EmployeeRepositoryLayer.Services
                     loginModel.LoginTime = Convert.ToDateTime(DateTime.Now);
 
                     // Add all the data into Ilist
-                    userModelList.Add(loginModel);
                 }
 
                 // close Sql Connection
                 this.sqlConnection.Close();
 
                 // return the Ilist
-                return userModelList;
+                return loginModel;
             }
             catch (Exception exception)
             {

@@ -26,13 +26,13 @@ namespace EmployeeManagement.Controllers
         /// <summary>
         /// It is an Reference of IEmployee Business
         /// </summary>
-        private readonly IEmployeeBuiseness employeeBusiness;
+        private readonly IEmployeeBL employeeBusiness;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeeController"/> class.
         /// </summary>
         /// /// <param name="employeeBusiness">It is an object of IEmployee Business</param>
-        public EmployeeController(IEmployeeBuiseness employeeBusiness)
+        public EmployeeController(IEmployeeBL employeeBusiness)
         {
             this.employeeBusiness = employeeBusiness;
         }

@@ -16,7 +16,9 @@ namespace EmployeeManagementApi.Controllers
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
+    using EmployeeCommonLayer.Model;
     using EmployeeCommonLayer.RequestModel;
+    using EmployeeCommonLayer.ResponseModel;
     using EmployeeManagement.Sender;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -34,7 +36,7 @@ namespace EmployeeManagementApi.Controllers
         /// <summary>
         /// It is an Reference of IUser Business
         /// </summary>
-        private readonly IUserBuiseness userBusiness;
+        private readonly IUserBLcs userBusiness;
 
         IConfiguration configuration;
 
@@ -44,7 +46,7 @@ namespace EmployeeManagementApi.Controllers
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="userBusiness">It is an object of IUser Business</param>
-        public UserController(IUserBuiseness userBusiness, IConfiguration configuration)
+        public UserController(IUserBLcs userBusiness, IConfiguration configuration)
         {
             this.userBusiness = userBusiness;
             this.configuration = configuration;
@@ -56,23 +58,23 @@ namespace EmployeeManagementApi.Controllers
         /// <param name="userModel">It is an object of User Model</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
-        [Route("userRegistration")]
+        [Route("Registration")]
         [AllowAnonymous]
-        public async Task<IActionResult> UserRegistration(RegistrationModel registrationModel)
+        public IActionResult UserRegistration(RegistrationRequestModel registrationModel)
         {
             try
             {
                 // Call the User Registration Method of User Business classs
-                var response = await this.userBusiness.UserRegistration(registrationModel);
+                var response = this.userBusiness.UserRegistration(registrationModel);
 
                 // check if response is equal to true
                 if (!response.Equals(false))
                 {
                     bool status = true;
                     var message = "User Registered Successfully";
-                    string msmqData = Convert.ToString(registrationModel.FirstName) + Convert.ToString(registrationModel.LastName) + "\n" + message + "\n Email : " + Convert.ToString(registrationModel.EmailId) + "\n Password : " + Convert.ToString(registrationModel.Password);
+                    string msmqData = Convert.ToString(registrationModel.FirstName)+" "+ Convert.ToString(registrationModel.LastName) + "\n" + message + "\n Email : " + Convert.ToString(registrationModel.EmailId) + "\n Password : " + Convert.ToString(registrationModel.Password);
                     sender.Message(msmqData);
-                    return this.Ok(new { status, message, data = registrationModel });
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
@@ -93,22 +95,22 @@ namespace EmployeeManagementApi.Controllers
         /// <param name="userModel">It is an object of User Model</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
-        [Route("userLogin")]
+        [Route("Login")]
         [AllowAnonymous]
-        public IActionResult UserLogin(UserLoginModel userLoginModel)
+        public IActionResult UserLogin(LoginRequestModel userLoginModel)
         {
             try
             {
                 // Call the User Login Method of User Business classs
                 var response =  this.userBusiness.UserLogin(userLoginModel);
-
                 // check if response count is equal to 1
-                if (!response.Count.Equals(0))
+                if (!response.Equals(null))
                 {
-                    var token = this.CreateToken(userLoginModel, "authenticate user");
+                    string token = this.CreateToken(userLoginModel, "authenticate user");
+                    response.Token = token;
                     bool status = true;
                     var message = "Login Successfully";
-                    return this.Ok(new { status, message, data = response, token });
+                    return this.Ok(new { status, message, data = response });
                 }
                 else
                 {
@@ -124,7 +126,7 @@ namespace EmployeeManagementApi.Controllers
             
         }
 
-        private string CreateToken(UserLoginModel userLoginModel, string type)
+        private string CreateToken(LoginRequestModel userLoginModel, string type)
         {
             try
             {
@@ -134,8 +136,6 @@ namespace EmployeeManagementApi.Controllers
                 var claims = new List<Claim>();
                 claims.Add(new Claim("EmailId", userLoginModel.EmailId.ToString()));
                 claims.Add(new Claim("TokenType", type));
-               // claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-
                 var token = new JwtSecurityToken(
                     claims: claims,
                     expires: DateTime.Now.AddHours(1),

@@ -21,10 +21,10 @@ namespace EmployeeRepositoryLayer.Services
     /// <summary>
     /// This Class is used to implement the methods of interface
     /// </summary>
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRL : IEmployeeRL
     {
         SqlConnection sqlConnection ;
-        public EmployeeRepository()
+        public EmployeeRL()
         {
             var configuration = this.GetConfiguration();
             this.sqlConnection = new SqlConnection(configuration.GetSection("Data").GetSection("ConnectionString").Value);

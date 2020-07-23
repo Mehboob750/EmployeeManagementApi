@@ -18,18 +18,18 @@ namespace EmployeeBuisenessLayer.Services
     /// <summary>
     /// This Class is used to implement the methods of interface
     /// </summary>
-    public class EmployeeBuiseness : IEmployeeBuiseness
+    public class EmployeeBL : IEmployeeBL
     {
         /// <summary>
         /// Created the Reference of IEmployeeRepository
         /// </summary>
-        private readonly IEmployeeRepository employeeRepository;
+        private readonly IEmployeeRL employeeRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmployeeBuiseness"/> class.
+        /// Initializes a new instance of the <see cref="EmployeeBL"/> class.
         /// </summary>
         /// <param name="employeeRepository">It contains the object IEmployeeRepository</param>
-        public EmployeeBuiseness(IEmployeeRepository employeeRepository)
+        public EmployeeBL(IEmployeeRL employeeRepository)
         {
             this.employeeRepository = employeeRepository;
         }

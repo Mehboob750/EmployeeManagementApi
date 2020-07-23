@@ -15,23 +15,24 @@ namespace EmployeeBuisenessLayer.Services
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.Model;
     using EmployeeCommonLayer.RequestModel;
+    using EmployeeCommonLayer.ResponseModel;
     using EmployeeRepositoryLayer.Interface;
 
     /// <summary>
     /// This Class is used to implement the methods of interface
     /// </summary>
-    public class UserBuiseness : IUserBuiseness
+    public class UserBL : IUserBLcs
     {
         /// <summary>
         /// Created the Reference of IUserRepository
         /// </summary>
-        private readonly IUserRepository userRepository;
+        private readonly IUserRL userRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserBuiseness"/> class.
+        /// Initializes a new instance of the <see cref="UserBL"/> class.
         /// </summary>
         /// <param name="userRepository">It contains the object IUserRepository</param>
-        public UserBuiseness(IUserRepository userRepository)
+        public UserBL(IUserRL userRepository)
         {
             this.userRepository = userRepository;
         }
@@ -41,29 +42,12 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Registered Successfully it returns true</returns>
-        public async Task<bool> UserRegistration(RegistrationModel registrationModel)
+        public IList<RegistrationResponseModel> UserRegistration(RegistrationRequestModel registrationModel)
         {
             try
             {
-                if (registrationModel != null)
-                {
-                    // Call the User Registration Method of User Repository Class
-                    var response = await this.userRepository.UserRegistration(registrationModel);
-
-                    // check response if equal returns true
-                    if (response == true)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                var response = this.userRepository.UserRegistration(registrationModel);
+                return response;
             }
             catch (Exception exception)
             {
@@ -76,7 +60,7 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Login Successfully it returns true</returns>
-        public IList<LoginModel> UserLogin(UserLoginModel userLoginModel)
+        public LoginResponseModel UserLogin(LoginRequestModel userLoginModel)
         {
             try
             {

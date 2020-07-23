@@ -97,16 +97,16 @@ namespace EmployeeManagement
             });
 
             // Add application service for Employee Business Layer
-            services.AddTransient<IEmployeeBuiseness, EmployeeBuiseness>();
+            services.AddTransient<IEmployeeBL, EmployeeBL>();
 
             // Add application service for Employee Repository Layer
-            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IEmployeeRL, EmployeeRL>();
 
             // Add application service for User Business Layer
-            services.AddTransient<IUserBuiseness, UserBuiseness>();
+            services.AddTransient<IUserBLcs, UserBL>();
 
             // Add application service for User Repository Layer
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserRL, UserRL>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

@@ -1,21 +1,21 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IEmployeeBuiseness.cs" company="BridgeLabz Solution">
+// <copyright file="IEmployeeRepository.cs" company="BridgeLabz Solution">
 //  Copyright (c) BridgeLabz Solution. All rights reserved.
 // </copyright>
 // <author>Mehboob Shaikh</author>
 //-----------------------------------------------------------------------
 [module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
 
-namespace EmployeeBuisenessLayer.Interface
+namespace EmployeeRepositoryLayer.Interface
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
 
     /// <summary>
-    /// Interface of Employee Business Layer
+    /// Interface of Employee Repository Layer
     /// </summary>
-    public interface IEmployeeBuiseness
+    public interface IEmployeeRL
     {
         /// <summary>
         /// It is an interface of Add Employee Method
