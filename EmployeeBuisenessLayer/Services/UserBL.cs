@@ -74,5 +74,32 @@ namespace EmployeeBuisenessLayer.Services
 
             }
         }
+
+        public Task<string> ForgetPassword(ForgotPasswordModel forgotPassword)
+        {
+            try
+            {
+                var response = this.userRepository.ForgetPassword(forgotPassword);
+                return response;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public object ResetPassword(ResetPasswordModel resetModel)
+        {
+            try
+            {
+                var response = this.userRepository.ResetPassword(resetModel);
+                return response;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        
+        }
     }
 }

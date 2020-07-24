@@ -12,13 +12,17 @@ namespace EmployeeRepositoryLayer.Services
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.IdentityModel.Tokens.Jwt;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.Model;
     using EmployeeCommonLayer.RequestModel;
     using EmployeeCommonLayer.ResponseModel;
+    using EmployeeManagement.MSMQSender;
     using EmployeeRepositoryLayer.Interface;
+    using EmployeeRepositoryLayer.Services.Token;
     using Microsoft.Extensions.Configuration;
 
     /// <summary>
@@ -37,9 +41,12 @@ namespace EmployeeRepositoryLayer.Services
         // private SqlConnection sqlConnection = new SqlConnection(connectionVariable);
 
         SqlConnection sqlConnection;
+
+        IConfiguration configuration;
+
         public UserRL()
         {
-            var configuration = this.GetConfiguration();
+            configuration = this.GetConfiguration();
             this.sqlConnection = new SqlConnection(configuration.GetSection("Data").GetSection("ConnectionString").Value);
         }
 
@@ -47,6 +54,7 @@ namespace EmployeeRepositoryLayer.Services
         /// It creates the object of EncryptDecrypt class
         /// </summary>
         private EncryptDecrypt encryptDecrypt = new EncryptDecrypt();
+        //private IConfiguration configuration;
 
         /// <summary>
         /// This Method is used to User Registration
@@ -202,11 +210,7 @@ namespace EmployeeRepositoryLayer.Services
 
                     loginModel.LoginTime = Convert.ToDateTime(DateTime.Now);
 
-                    // Add all the data into Ilist
                 }
-
-                // close Sql Connection
-                this.sqlConnection.Close();
 
                 // return the Ilist
                 return loginModel;
@@ -214,6 +218,113 @@ namespace EmployeeRepositoryLayer.Services
             catch (Exception exception)
             {
                 throw new Exception(exception.Message);
+            }
+            finally
+            {
+                // close Sql Connection
+                this.sqlConnection.Close();
+            }
+        }
+
+        public async Task<string> ForgetPassword(ForgotPasswordModel forgotPassword)
+        {
+            try
+            {
+                RegistrationResponseModel responseModel = new RegistrationResponseModel();
+                // create the object of SqlCommand and send the command and connection object
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spForgetPassword", this.sqlConnection);
+
+                // Add the First Name Value to database
+                sqlCommand.Parameters.AddWithValue("@EmailId", forgotPassword.EmailId);
+
+                // Opens the Sql Connection
+                this.sqlConnection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    // Read the Employee Id and convert it into integer
+                    responseModel.Id = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+
+                    // Read the Email Id
+                    responseModel.EmailId = sqlDataReader["EmailId"].ToString();
+                }
+
+                // close Sql Connection
+                this.sqlConnection.Close();
+
+                if (responseModel.EmailId != null)
+                {
+                    TokenGenerator tokenGenerator = new TokenGenerator(this.configuration);
+                    var token = tokenGenerator.CreateToken(responseModel);
+
+                    ////create the object of MSMQSender class
+                    ForgetPasswordSender msmqSender = new ForgetPasswordSender();
+
+                    ////call the method ForgetPasswordMessage
+                    msmqSender.ForgetPasswordMessage(forgotPassword.EmailId, token);
+                    return "Token Has Been Sent";
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public object ResetPassword(ResetPasswordModel resetModel)
+        {
+            try
+            {
+                // token handler 
+                var handler = new JwtSecurityTokenHandler();
+
+                // read the token
+                var jsonToken = handler.ReadToken(resetModel.ResetToken);
+
+                // read token as json web token
+                var tokenS = handler.ReadToken(resetModel.ResetToken) as JwtSecurityToken;
+
+                // claim for email
+                var jwtEmail = tokenS.Claims.FirstOrDefault(claim => claim.Type == "EmailId").Value;
+
+                SqlCommand sqlCommand = this.StoreProcedureConnection("spResetPassword", this.sqlConnection);
+
+                // Add the Email Id
+                sqlCommand.Parameters.AddWithValue("@EmailId", jwtEmail);
+
+                string password = this.encryptDecrypt.EncodePasswordToBase64(resetModel.NewPassword);
+
+                // Add the Encrypted password
+                sqlCommand.Parameters.AddWithValue("@NewPassword", password);
+
+                // Opens the Sql Connection
+                this.sqlConnection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                int status;
+                while (sqlDataReader.Read())
+                {
+                    status = sqlDataReader.GetInt32(0);
+
+                    if (status == 0)
+                    {
+                        return null;
+                    }
+                }
+                //this.sqlConnection.Close();
+                return "Password Changed Successfully"; ;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                // close Sql Connection
+                this.sqlConnection.Close();
             }
         }
 

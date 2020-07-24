@@ -15,10 +15,7 @@ namespace EmployeeManagementApi.Controllers
     using System.Text;
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
-    using EmployeeCommonLayer;
-    using EmployeeCommonLayer.Model;
     using EmployeeCommonLayer.RequestModel;
-    using EmployeeCommonLayer.ResponseModel;
     using EmployeeManagement.Sender;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -104,7 +101,7 @@ namespace EmployeeManagementApi.Controllers
                 // Call the User Login Method of User Business classs
                 var response =  this.userBusiness.UserLogin(userLoginModel);
                 // check if response count is equal to 1
-                if (!response.Equals(null))
+                if (!response.Id.Equals(0))
                 {
                     string token = this.CreateToken(userLoginModel, "authenticate user");
                     response.Token = token;
@@ -124,6 +121,52 @@ namespace EmployeeManagementApi.Controllers
                 return this.BadRequest(new { status = false, message = e.Message});
             }
             
+        }
+
+        [HttpPost]
+        [Route("ForgetPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgetPassword(ForgotPasswordModel forgotPassword)
+        {
+            try
+            {
+                var data = await this.userBusiness.ForgetPassword(forgotPassword);
+                if (data != null)
+                {
+                    return this.Ok(new { status = "True", message = "Link Has Been Sent To Your Email" });
+                }
+                else
+                {
+                    return this.BadRequest(new { status = "False", message = "Your Email Is Not Correct" });
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(new { message = exception.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(ResetPasswordModel resetModel)
+        {
+            try
+            {
+                var data = this.userBusiness.ResetPassword(resetModel);
+                if (data != null)
+                {
+                    return this.Ok(new { status = "true", message = "Password Reset Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { status = "False", message = "Failed To Reset Password" });
+                }
+            }
+            catch (Exception exception)
+            {
+                return this.BadRequest(new { message = exception.Message });
+            }
         }
 
         private string CreateToken(LoginRequestModel userLoginModel, string type)

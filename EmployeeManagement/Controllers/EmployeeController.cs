@@ -21,7 +21,7 @@ namespace EmployeeManagement.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class EmployeeController : ControllerBase
     {
         /// <summary>
