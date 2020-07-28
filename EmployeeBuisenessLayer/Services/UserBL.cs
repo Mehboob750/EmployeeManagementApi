@@ -21,7 +21,7 @@ namespace EmployeeBuisenessLayer.Services
     /// <summary>
     /// This Class is used to implement the methods of interface
     /// </summary>
-    public class UserBL : IUserBLcs
+    public class UserBL : IUserBL
     {
         /// <summary>
         /// Created the Reference of IUserRepository
@@ -46,6 +46,15 @@ namespace EmployeeBuisenessLayer.Services
         {
             try
             {
+                if (registrationModel.FirstName == "" || registrationModel.LastName == "" || registrationModel.City == "" || registrationModel.EmailId == "" || registrationModel.PhoneNumber == "" || registrationModel.Gender == "" || registrationModel.Password == "")
+                {
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.EMPTY_FIELD_EXCEPTION, "Empty Variable Field");
+                }
+                else if (registrationModel.FirstName == null || registrationModel.LastName == null || registrationModel.City == null || registrationModel.EmailId == null || registrationModel.PhoneNumber == null || registrationModel.Gender == null || registrationModel.Password == null)
+                {  
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.NULL_FIELD_EXCEPTION, "Null Variable Field");
+                }
+
                 var response = this.userRepository.UserRegistration(registrationModel);
                 return response;
             }

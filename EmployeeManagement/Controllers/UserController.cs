@@ -30,24 +30,26 @@ namespace EmployeeManagementApi.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        /// <summary>
-        /// It is an Reference of IUser Business
-        /// </summary>
-        private readonly IUserBLcs userBusiness;
-
         IConfiguration configuration;
 
         Sender sender = new Sender();
+        private IUserBL userBuiseness;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="userBusiness">It is an object of IUser Business</param>
-        public UserController(IUserBLcs userBusiness, IConfiguration configuration)
+        public UserController(IUserBL userBuiseness, IConfiguration configuration)
         {
-            this.userBusiness = userBusiness;
+            this.userBuiseness = userBuiseness;
             this.configuration = configuration;
         }
+
+       /* public UserController(IUserBL userBuiseness, IConfiguration configuration)
+        {
+            this.userBuiseness = userBuiseness;
+            this.configuration = configuration;
+        }*/
 
         /// <summary>
         /// This Method is used for User Registration
@@ -62,7 +64,7 @@ namespace EmployeeManagementApi.Controllers
             try
             {
                 // Call the User Registration Method of User Business classs
-                var response = this.userBusiness.UserRegistration(registrationModel);
+                var response = this.userBuiseness.UserRegistration(registrationModel);
 
                 // check if response is equal to true
                 if (!response.Equals(false))
@@ -99,7 +101,7 @@ namespace EmployeeManagementApi.Controllers
             try
             {
                 // Call the User Login Method of User Business classs
-                var response =  this.userBusiness.UserLogin(userLoginModel);
+                var response =  this.userBuiseness.UserLogin(userLoginModel);
                 // check if response count is equal to 1
                 if (!response.Id.Equals(0))
                 {
@@ -130,7 +132,7 @@ namespace EmployeeManagementApi.Controllers
         {
             try
             {
-                var data = await this.userBusiness.ForgetPassword(forgotPassword);
+                var data = await this.userBuiseness.ForgetPassword(forgotPassword);
                 if (data != null)
                 {
                     return this.Ok(new { status = "True", message = "Link Has Been Sent To Your Email" });
@@ -149,11 +151,12 @@ namespace EmployeeManagementApi.Controllers
         [HttpPost]
         [Route("ResetPassword")]
         [AllowAnonymous]
+
         public IActionResult ResetPassword(ResetPasswordModel resetModel)
         {
             try
             {
-                var data = this.userBusiness.ResetPassword(resetModel);
+                var data = this.userBuiseness.ResetPassword(resetModel);
                 if (data != null)
                 {
                     return this.Ok(new { status = "true", message = "Password Reset Successfully" });

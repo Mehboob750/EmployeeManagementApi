@@ -5,14 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Interface\IUserBLcs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Interface\IUserBLcs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EmployeeCommonLayer\EmployeeCommonLayer.csproj" />
     <ProjectReference Include="..\EmployeeRepositoryLayer\EmployeeRepositoryLayer.csproj" />
   </ItemGroup>

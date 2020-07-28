@@ -44,6 +44,15 @@ namespace EmployeeBuisenessLayer.Services
         {
             try
             {
+                if (employeeModel.FirstName == "" || employeeModel.LastName == "" || employeeModel.City == "" || employeeModel.EmailId == "" || employeeModel.PhoneNumber == "" || employeeModel.Gender == "")
+                {
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.EMPTY_FIELD_EXCEPTION, "Empty Variable Field");
+                }
+                else if (employeeModel.FirstName == null || employeeModel.LastName == null || employeeModel.City == null || employeeModel.EmailId == null || employeeModel.PhoneNumber == null || employeeModel.Gender == null)
+                {
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.NULL_FIELD_EXCEPTION, "Null Variable Field");
+                }
+
                 // Call the Add Employee Method of Employee Repository Class
                 var response = this.employeeRepository.AddEmployee(employeeModel);
                 return response;

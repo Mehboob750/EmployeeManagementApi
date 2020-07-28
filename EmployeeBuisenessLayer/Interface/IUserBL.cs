@@ -18,7 +18,7 @@ namespace EmployeeBuisenessLayer.Interface
     /// <summary>
     /// Interface of User Business Layer
     /// </summary>
-    public interface IUserBLcs
+    public interface IUserBL
     {
         /// <summary>
         /// It is an interface of User Registration Method

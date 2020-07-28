@@ -12,14 +12,14 @@ namespace EmployeeCommonLayer.RequestModel
         /// Gets or sets the First name
         /// </summary>
         [Required]
-        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "First Name is not valid")]
+        [RegularExpression("^.{3,}[A-Z][a-zA-Z]*$", ErrorMessage = "First Name is not valid")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the Last name
         /// </summary>
         [Required]
-        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "Last Name is not valid")]
+        [RegularExpression("^.{3,}[A-Z][a-zA-Z]*$", ErrorMessage = "Last Name is not valid")]
         public string LastName { get; set; }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace EmployeeCommonLayer.RequestModel
         /// Gets or sets the City
         /// </summary>
         [Required]
-        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "City is not valid")]
+        [RegularExpression("^.{3,}[A-Z][a-zA-Z]*$", ErrorMessage = "City is not valid")]
         public string City { get; set; }
     }
 }

@@ -103,7 +103,7 @@ namespace EmployeeManagement
             services.AddTransient<IEmployeeRL, EmployeeRL>();
 
             // Add application service for User Business Layer
-            services.AddTransient<IUserBLcs, UserBL>();
+            services.AddTransient<IUserBL, UserBL>();
 
             // Add application service for User Repository Layer
             services.AddTransient<IUserRL, UserRL>();
