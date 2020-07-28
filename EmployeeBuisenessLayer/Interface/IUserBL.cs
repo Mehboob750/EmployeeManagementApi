@@ -34,7 +34,7 @@ namespace EmployeeBuisenessLayer.Interface
         /// <returns>If Login Successfully it returns true</returns>
         LoginResponseModel UserLogin(LoginRequestModel userLoginModel);
 
-        Task<string> ForgetPassword(ForgotPasswordModel forgotPassword);
+        object ForgetPassword(ForgotPasswordModel forgotPassword);
        
         object ResetPassword(ResetPasswordModel resetModel);
     }

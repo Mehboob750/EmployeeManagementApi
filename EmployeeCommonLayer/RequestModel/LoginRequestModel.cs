@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="LoginRequestModel.cs" company="BridgeLabz Solution">
+//  Copyright (c) BridgeLabz Solution. All rights reserved.
+// </copyright>
+// <author>Mehboob Shaikh</author>
+//-----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
 
 namespace EmployeeCommonLayer.RequestModel
 {
+    using System.ComponentModel.DataAnnotations;
+
+    /// <summary>
+    /// It is an Model Class For Login
+    /// </summary>
     public class LoginRequestModel
     {
         /// <summary>

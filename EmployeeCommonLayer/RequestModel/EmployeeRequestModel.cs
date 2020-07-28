@@ -1,25 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="EmployeeRequestModel.cs" company="BridgeLabz Solution">
+//  Copyright (c) BridgeLabz Solution. All rights reserved.
+// </copyright>
+// <author>Mehboob Shaikh</author>
+//-----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
 
 namespace EmployeeCommonLayer.RequestModel
 {
+    using System.ComponentModel.DataAnnotations;
+
+    /// <summary>
+    /// This is Model Class For Employee
+    /// </summary>
     public class EmployeeRequestModel
     {
         /// <summary>
         /// Gets or sets the First name
         /// </summary>
         [Required]
-        [RegularExpression("^.{3,}[A-Z][a-zA-Z]*$", ErrorMessage = "First Name is not valid")]
+        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "First Name is not valid")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the Last name
         /// </summary>
         [Required]
-        [RegularExpression("^.{3,}[A-Z][a-zA-Z]*$", ErrorMessage = "Last Name is not valid")]
+        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "Last Name is not valid")]
         public string LastName { get; set; }
 
         /// <summary>
@@ -47,10 +54,7 @@ namespace EmployeeCommonLayer.RequestModel
         /// Gets or sets the City
         /// </summary>
         [Required]
-        [RegularExpression("^.{3,}[A-Z][a-zA-Z]*$", ErrorMessage = "City is not valid")]
+        [RegularExpression("^[A-Z][a-zA-Z]*$", ErrorMessage = "City is not valid")]
         public string City { get; set; }
     }
 }
-
-
-

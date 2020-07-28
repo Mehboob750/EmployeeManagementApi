@@ -1,11 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="LoginResponseModel.cs" company="BridgeLabz Solution">
+//  Copyright (c) BridgeLabz Solution. All rights reserved.
+// </copyright>
+// <author>Mehboob Shaikh</author>
+//-----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
 
 namespace EmployeeCommonLayer.Model
 {
+    using System;
+
+    /// <summary>
+    /// It is an Model class of Login Response
+    /// </summary>
     public class LoginResponseModel
     {
         /// <summary>
@@ -48,8 +55,14 @@ namespace EmployeeCommonLayer.Model
         /// </summary>
         public DateTime RegistrationDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Login Time
+        /// </summary>
         public DateTime LoginTime { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Token
+        /// </summary>
         public string Token { get; set; }
     }
 }

@@ -1,8 +1,16 @@
-﻿using System;
-using Experimental.System.Messaging;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Program.cs" company="BridgeLabz Solution">
+//  Copyright (c) BridgeLabz Solution. All rights reserved.
+// </copyright>
+// <author>Mehboob Shaikh</author>
+//-----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
 
 namespace MSMQ
 {
+    using System;
+    using Experimental.System.Messaging;
+
     public delegate void MessageReceivedEventHandler(object sender, MessageEventArgs args);
 
     class Program
@@ -147,7 +155,7 @@ namespace MSMQ
             Console.WriteLine("Message: " + message.Body + message.Label);
 
             // creating email service class object
-            Receiver receiver = new Receiver();
+            SendMail receiver = new SendMail();
 
             // sending token and email address to email service class method
             receiver.ReceiveMessageFromQueue(message.Body.ToString(), message.Label.ToString());

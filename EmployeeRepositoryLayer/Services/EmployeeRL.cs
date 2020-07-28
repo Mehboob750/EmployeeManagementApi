@@ -311,7 +311,6 @@ namespace EmployeeRepositoryLayer.Services
             }
         }
 
-
         /// <summary>
         ///  This Method is used to Search the Record
         /// </summary>
@@ -402,6 +401,5 @@ namespace EmployeeRepositoryLayer.Services
                 return command;
             }
         }
-
     }
 }

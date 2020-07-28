@@ -41,14 +41,14 @@ namespace EmployeeRepositoryLayer.Interface
         /// <summary>
         /// It is an interface of Delete Employee Method
         /// </summary>
-        /// <param name="employeeModel">It is an object of Employee Model class</param>
+        /// <param name="EmployeeId">It contains EmailId</param>
         /// <returns>If record is Deleted it returns true</returns>
         EmployeeResponseModel DeleteEmployee(int EmployeeId);
 
         /// <summary>
         /// It is an interface of Search Employee Method
         /// </summary>
-        /// <param name="employeeModel">It is an object of Employee Model class</param>
+        /// <param name="EmployeeId">It contains EmailId</param>
         /// <returns>It returns the search record</returns>
         EmployeeResponseModel SearchEmployee(int EmployeeId);
     }

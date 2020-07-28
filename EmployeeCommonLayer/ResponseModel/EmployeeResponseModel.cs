@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="EmployeeModel.cs" company="BridgeLabz Solution">
+// <copyright file="EmployeeResponseModel.cs" company="BridgeLabz Solution">
 //  Copyright (c) BridgeLabz Solution. All rights reserved.
 // </copyright>
 // <author>Mehboob Shaikh</author>
@@ -9,9 +9,6 @@
 namespace EmployeeCommonLayer
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// This class contains all the parameter used in Employee Table

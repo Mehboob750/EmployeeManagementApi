@@ -1,3 +1,11 @@
+//-----------------------------------------------------------------------
+// <copyright file="EmployeeTestCases.cs" company="BridgeLabz Solution">
+//  Copyright (c) BridgeLabz Solution. All rights reserved.
+// </copyright>
+// <author>Mehboob Shaikh</author>
+//-----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
+
 namespace EmployeeManagementTestCases
 {
     using System;
@@ -11,12 +19,29 @@ namespace EmployeeManagementTestCases
     using Microsoft.AspNetCore.Mvc;
     using Xunit;
 
+    /// <summary>
+    /// This class contains the testcases of Employee
+    /// </summary>
     public class EmployeeTestCases
     {
+        /// <summary>
+        /// Created Reference of EmployeeController
+        /// </summary>
         EmployeeController employeeController;
+
+        /// <summary>
+        /// Created Reference of IEmployeeBL
+        /// </summary>
         IEmployeeBL employeeBuiseness;
+
+        /// <summary>
+        /// Created Reference of IEmployeeRL
+        /// </summary>
         IEmployeeRL employeeRepository;
 
+        /// <summary>
+        /// Default constructor used to create new objects
+        /// </summary>
         public EmployeeTestCases()
         {
             employeeRepository = new EmployeeRL();
@@ -24,6 +49,9 @@ namespace EmployeeManagementTestCases
             employeeController = new EmployeeController(employeeBuiseness);
         }
 
+        /// <summary>
+        /// Given Employee Request Model check for not Null
+        /// </summary>
         [Fact]
         public void GivenEmployeeRequestModel_WhenCheckForNotNull_ShouldReturn()
         {
@@ -38,6 +66,9 @@ namespace EmployeeManagementTestCases
                 Assert.NotNull(employeeModel);
         }
 
+        /// <summary>
+        /// Given EmployeeRequestModel Added Returns OkResult 
+        /// </summary>
         [Fact]
         public void GivenEmployeeRequestModel_WhenCalledAddEmployee_ShouldReturnOkResult()
         {
@@ -60,6 +91,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Empty strings Added Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenEmployeeRequestModel_WhenEmptyStringFields_ShouldReturnBadRequestObjectResult()
         {
@@ -82,6 +116,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given null strings Added Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenEmployeeRequestModel_WhenNullPass_ShouldReturnBadRequestObjectResult()
         {
@@ -104,6 +141,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Read All Employee Method used it returns Ok Result
+        /// </summary>
         [Fact]
         public void GivenController_WhenReadEmployeeCalled_ShouldReturnOkResult()
         {
@@ -118,6 +158,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Employee Id and Data Update Method is Used it Returns Ok Result
+        /// </summary>
         [Fact]
         public void GivenEmployeeRequestModel_WhenCalledUpdateEmployee_ShouldReturnOkResult()
         {
@@ -140,6 +183,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Wrong Employee Id and Data Update Method is Used it Returns Bad Request Object Result
+        /// </summary>
         [Fact]
         public void GivenWrongEmployeeId_WhenCalledUpdateEmployee_ShouldReturnBadRequestObjectResult()
         {
@@ -162,6 +208,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Employee Id Delete Method is Used it Returns Ok Result
+        /// </summary>
         [Fact]
         public void GivenEmployeeId_WhenCalledDeleteEmployee_ShouldReturnOkResult()
         {
@@ -177,6 +226,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Wrong Employee Id Delete Method is Used it Returns Bad Request Obejct Result
+        /// </summary>
         [Fact]
         public void GivenWrongEmployeeId_WhenCalledDeleteEmployee_ShouldReturnBadRequestObjectResult()
         {
@@ -192,6 +244,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Employee Id Search Method is Used it Returns Ok Result
+        /// </summary>
         [Fact]
         public void GivenEmployeeId_WhenCalledSearchEmployee_ShouldReturnOkResult()
         {
@@ -207,6 +262,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Wrong Employee Id Search Method is Used it Returns Bad Request Obejct Result
+        /// </summary>
         [Fact]
         public void GivenWrongEmployeeId_WhenCalledSearchEmployee_ShouldReturnBadRequestObjectResult()
         {

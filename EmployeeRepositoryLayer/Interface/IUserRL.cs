@@ -34,8 +34,18 @@ namespace EmployeeRepositoryLayer.Interface
         /// <returns>If Login Successfully it returns true</returns>
         LoginResponseModel UserLogin(LoginRequestModel userLoginModel);
 
-        Task<string> ForgetPassword(ForgotPasswordModel forgotPassword);
+        /// <summary>
+        /// It is an interface of Forget Password Method
+        /// </summary>
+        /// <param name="forgotPassword">It is an object of Forgot Password Model class</param>
+        /// <returns></returns>
+        object ForgetPassword(ForgotPasswordModel forgotPassword);
 
+        /// <summary>
+        /// It is an interface of Reset Password Method
+        /// </summary>
+        /// <param name="resetModel">It is an object of Reset Password Model class</param>
+        /// <returns></returns>
         object ResetPassword(ResetPasswordModel resetModel);
     }
 }

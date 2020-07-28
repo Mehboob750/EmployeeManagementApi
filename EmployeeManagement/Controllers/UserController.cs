@@ -45,16 +45,10 @@ namespace EmployeeManagementApi.Controllers
             this.configuration = configuration;
         }
 
-       /* public UserController(IUserBL userBuiseness, IConfiguration configuration)
-        {
-            this.userBuiseness = userBuiseness;
-            this.configuration = configuration;
-        }*/
-
         /// <summary>
         /// This Method is used for User Registration
         /// </summary>
-        /// <param name="userModel">It is an object of User Model</param>
+        /// <param name="registrationModel">It is an object of User Model</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
         [Route("Registration")]
@@ -91,7 +85,7 @@ namespace EmployeeManagementApi.Controllers
         /// <summary>
         /// This Method is used for User Login
         /// </summary>
-        /// <param name="userModel">It is an object of User Model</param>
+        /// <param name="userLoginModel">It is an object of User Model</param>
         /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
         [Route("Login")]
@@ -125,14 +119,20 @@ namespace EmployeeManagementApi.Controllers
             
         }
 
+        /// <summary>
+        /// This Method is used for Forget Password
+        /// </summary>
+        /// <param name="forgotPassword">It is an object of Forgot Password Model</param>
+        /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
         [Route("ForgetPassword")]
         [AllowAnonymous]
-        public async Task<IActionResult> ForgetPassword(ForgotPasswordModel forgotPassword)
+        public IActionResult ForgetPassword(ForgotPasswordModel forgotPassword)
         {
             try
             {
-                var data = await this.userBuiseness.ForgetPassword(forgotPassword);
+                // Call the Forget Password Method of User Business classs
+                var data = this.userBuiseness.ForgetPassword(forgotPassword);
                 if (data != null)
                 {
                     return this.Ok(new { status = "True", message = "Link Has Been Sent To Your Email" });
@@ -148,6 +148,11 @@ namespace EmployeeManagementApi.Controllers
             }
         }
 
+        /// <summary>
+        /// This Method is used for Reset Password
+        /// </summary>
+        /// <param name="resetModel">It is an object of Reset Password Model</param>
+        /// <returns>Returns the result in SMD format</returns>
         [HttpPost]
         [Route("ResetPassword")]
         [AllowAnonymous]
@@ -156,6 +161,7 @@ namespace EmployeeManagementApi.Controllers
         {
             try
             {
+                // Call the Reset Password Method of User Business classs
                 var data = this.userBuiseness.ResetPassword(resetModel);
                 if (data != null)
                 {
@@ -172,6 +178,12 @@ namespace EmployeeManagementApi.Controllers
             }
         }
 
+        /// <summary>
+        /// This Method is used to generate JWT Token
+        /// </summary>
+        /// <param name="userLoginModel">It is an object of Login Request Model</param>
+        /// <param name="type">It Contains token type</param>
+        /// <returns>Returns JWT Token</returns>
         private string CreateToken(LoginRequestModel userLoginModel, string type)
         {
             try

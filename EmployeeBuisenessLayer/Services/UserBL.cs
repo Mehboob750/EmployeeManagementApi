@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="UserBuiseness.cs" company="BridgeLabz Solution">
+// <copyright file="UserBL.cs" company="BridgeLabz Solution">
 //  Copyright (c) BridgeLabz Solution. All rights reserved.
 // </copyright>
 // <author>Mehboob Shaikh</author>
@@ -84,7 +84,12 @@ namespace EmployeeBuisenessLayer.Services
             }
         }
 
-        public Task<string> ForgetPassword(ForgotPasswordModel forgotPassword)
+        /// <summary>
+        /// This Method is used when Forget Password
+        /// </summary>
+        /// <param name="forgotPassword">It is an object of Forgot Password Model</param>
+        /// <returns>It returns the EmailId </returns>
+        public object ForgetPassword(ForgotPasswordModel forgotPassword)
         {
             try
             {

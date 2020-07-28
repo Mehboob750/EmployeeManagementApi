@@ -226,7 +226,12 @@ namespace EmployeeRepositoryLayer.Services
             }
         }
 
-        public async Task<string> ForgetPassword(ForgotPasswordModel forgotPassword)
+        /// <summary>
+        /// This Method is used For Forget Password
+        /// </summary>
+        /// <param name="forgotPassword">It contains the Object of Forget Password Model</param>
+        /// <returns>It returns message</returns>
+        public object ForgetPassword(ForgotPasswordModel forgotPassword)
         {
             try
             {
@@ -275,6 +280,11 @@ namespace EmployeeRepositoryLayer.Services
             }
         }
 
+        /// <summary>
+        /// This Method is used For Reset Password
+        /// </summary>
+        /// <param name="resetModel">It contains the Object of Reset Password Model</param>
+        /// <returns></returns>
         public object ResetPassword(ResetPasswordModel resetModel)
         {
             try
@@ -328,6 +338,12 @@ namespace EmployeeRepositoryLayer.Services
             }
         }
 
+        /// <summary>
+        /// This Method is Used For Stored Procedure Connection
+        /// </summary>
+        /// <param name="procedurename">It contains the store procedure name</param>
+        /// <param name="connection">It is an object of SqlConnection</param>
+        /// <returns>It returns Sql Command</returns>
         private SqlCommand StoreProcedureConnection(string procedurename, SqlConnection connection)
         {
             using (SqlCommand command = new SqlCommand(procedurename, connection))

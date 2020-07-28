@@ -1,22 +1,52 @@
-﻿using System;
-using EmployeeBuisenessLayer.Interface;
-using EmployeeBuisenessLayer.Services;
-using EmployeeCommonLayer.RequestModel;
-using EmployeeManagementApi.Controllers;
-using EmployeeRepositoryLayer.Interface;
-using EmployeeRepositoryLayer.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Xunit;
+﻿//-----------------------------------------------------------------------
+// <copyright file="UserTestCases.cs" company="BridgeLabz Solution">
+//  Copyright (c) BridgeLabz Solution. All rights reserved.
+// </copyright>
+// <author>Mehboob Shaikh</author>
+//-----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
 
 namespace EmployeeManagementTestCases
 {
+    using System;
+    using EmployeeBuisenessLayer.Interface;
+    using EmployeeBuisenessLayer.Services;
+    using EmployeeCommonLayer.RequestModel;
+    using EmployeeManagementApi.Controllers;
+    using EmployeeRepositoryLayer.Interface;
+    using EmployeeRepositoryLayer.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Xunit;
+
+    /// <summary>
+    /// This class contains the testcases of User
+    /// </summary>
     public class UserTestCases
     {
+        /// <summary>
+        /// Created Reference of UserController
+        /// </summary>
         UserController userController;
+
+        /// <summary>
+        /// Created Reference of IUserBL
+        /// </summary>
         IUserBL userBuiseness;
+
+        /// <summary>
+        /// Created Reference of IUserRL
+        /// </summary>
         IUserRL userRepository;
+
+        /// <summary>
+        /// Created Reference of IConfiguration
+        /// </summary>
         IConfiguration configuration;
+
+        /// <summary>
+        /// Default constructor used to create new objects
+        /// </summary>
         public UserTestCases()
         {
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
@@ -27,6 +57,9 @@ namespace EmployeeManagementTestCases
             userController = new UserController(userBuiseness, configuration);
         }
 
+        /// <summary>
+        /// Given Registration Request Model check for not Null
+        /// </summary>
         [Fact]
         public void GivenRegisterationRequestModel_WhenCheckForNotNull_ShouldReturn()
         {
@@ -42,6 +75,9 @@ namespace EmployeeManagementTestCases
             Assert.NotNull(registrationModel);
         }
 
+        /// <summary>
+        /// Given RegistrationRequestModel Registered Returns Ok Result 
+        /// </summary>
         [Fact]
         public void GivenRegisterationRequestModel_WhenRegisterCall_ShouldReturnOkResult()
         {
@@ -65,6 +101,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given RegistrationRequestModel With Empty Fields Registered Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenRegisterationRequestModel_WhenFieldsAreEmpty_ShouldReturnBadRequestObjectResult()
         {
@@ -88,7 +127,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
-        
+        /// <summary>
+        /// Given RegistrationRequestModel With null Fields Registered Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenRegisterationRequestModel_WhenFieldsAreNull_ShouldReturnBadRequestObjectResult()
         {
@@ -112,6 +153,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given LoginRequestModel When Login Returns Ok Result 
+        /// </summary>
         [Fact]
         public void GivenLoginRequestModel_WhenUserLoginCalled_ShouldReturnOkResult()
         {
@@ -130,6 +174,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given wrong EmailId When Login Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenWrongEmailId_WhenUserLoginCalled_ShouldReturnBadRequestObjectResult()
         {
@@ -148,6 +195,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given wrong Password When Login Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenWrongPassword_WhenUserLoginCalled_ShouldReturnBadRequestObjectResult()
         {
@@ -166,6 +216,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given null Password When Login Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenNullPassword_WhenUserLoginCalled_ShouldReturnBadRequestObjectResult()
         {
@@ -184,6 +237,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Empty Password When Login Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenEmptyPassword_WhenUserLoginCalled_ShouldReturnBadRequestObjectResult()
         {
@@ -202,6 +258,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Empty EmailId When Login Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenEmptyEmailId_WhenUserLoginCalled_ShouldReturnBadRequestObjectResult()
         {
@@ -220,6 +279,9 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        /// <summary>
+        /// Given Null EmailId When Login Returns Bad Object Result 
+        /// </summary>
         [Fact]
         public void GivenNullEmailId_WhenUserLoginCalled_ShouldReturnBadRequestObjectResult()
         {

@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="RegistrationResponseModel.cs" company="BridgeLabz Solution">
+//  Copyright (c) BridgeLabz Solution. All rights reserved.
+// </copyright>
+// <author>Mehboob Shaikh</author>
+//-----------------------------------------------------------------------
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName", Justification = "Reviewed.")]
 
 namespace EmployeeCommonLayer.ResponseModel
 {
+    using System;
+
+    /// <summary>
+    /// It is an Model class of Registration Response Model
+    /// </summary>
     public class RegistrationResponseModel
     {
         /// <summary>
         /// Gets or sets the Employee Id
         /// </summary>
         public int Id { get; set; }
+
         /// <summary>
         /// Gets or sets the First name
         /// </summary>
