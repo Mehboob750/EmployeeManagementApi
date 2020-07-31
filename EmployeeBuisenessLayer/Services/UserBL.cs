@@ -10,9 +10,7 @@ namespace EmployeeBuisenessLayer.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
-    using EmployeeCommonLayer;
     using EmployeeCommonLayer.Model;
     using EmployeeCommonLayer.RequestModel;
     using EmployeeCommonLayer.ResponseModel;
@@ -40,12 +38,13 @@ namespace EmployeeBuisenessLayer.Services
         /// <summary>
         /// This Method is used to User Registration
         /// </summary>
-        /// <param name="userModel">It contains the Object of User Model</param>
+        /// <param name="registrationModel">It contains the Object of Registration Request Model</param>
         /// <returns>If User Registered Successfully it returns true</returns>
         public IList<RegistrationResponseModel> UserRegistration(RegistrationRequestModel registrationModel)
         {
             try
             {
+                // It check if any field is Empty
                 if (registrationModel.FirstName == "" || registrationModel.LastName == "" || registrationModel.City == "" || registrationModel.EmailId == "" || registrationModel.PhoneNumber == "" || registrationModel.Gender == "" || registrationModel.Password == "")
                 {
                     throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.EMPTY_FIELD_EXCEPTION, "Empty Variable Field");
@@ -67,7 +66,7 @@ namespace EmployeeBuisenessLayer.Services
         /// <summary>
         /// This Method is used to User Login
         /// </summary>
-        /// <param name="userModel">It contains the Object of User Model</param>
+        /// <param name="userLoginModel">It contains the Object of Login Request Model</param>
         /// <returns>If User Login Successfully it returns true</returns>
         public LoginResponseModel UserLogin(LoginRequestModel userLoginModel)
         {
@@ -88,11 +87,12 @@ namespace EmployeeBuisenessLayer.Services
         /// This Method is used when Forget Password
         /// </summary>
         /// <param name="forgotPassword">It is an object of Forgot Password Model</param>
-        /// <returns>It returns the EmailId </returns>
+        /// <returns>It returns the EmailId</returns>
         public object ForgetPassword(ForgotPasswordModel forgotPassword)
         {
             try
             {
+                // Call the Forget Password Method of User Repository Class
                 var response = this.userRepository.ForgetPassword(forgotPassword);
                 return response;
             }
@@ -102,10 +102,16 @@ namespace EmployeeBuisenessLayer.Services
             }
         }
 
+        /// <summary>
+        /// This Method is used when Reset Password
+        /// </summary>
+        /// <param name="resetModel">It is an object of Reset Password Model</param>
+        /// <returns></returns>
         public object ResetPassword(ResetPasswordModel resetModel)
         {
             try
             {
+                // Call the Reset Password Method of User Repository Class
                 var response = this.userRepository.ResetPassword(resetModel);
                 return response;
             }

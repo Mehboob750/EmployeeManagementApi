@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IUserBuiseness.cs" company="BridgeLabz Solution">
+// <copyright file="IUserBL.cs" company="BridgeLabz Solution">
 //  Copyright (c) BridgeLabz Solution. All rights reserved.
 // </copyright>
 // <author>Mehboob Shaikh</author>
@@ -34,8 +34,18 @@ namespace EmployeeBuisenessLayer.Interface
         /// <returns>If Login Successfully it returns true</returns>
         LoginResponseModel UserLogin(LoginRequestModel userLoginModel);
 
+        /// <summary>
+        /// It is an interface of Forget Password Method
+        /// </summary>
+        /// <param name="forgotPassword">It is an object of Forgot Password Model class</param>
+        /// <returns></returns>
         object ForgetPassword(ForgotPasswordModel forgotPassword);
-       
+
+        /// <summary>
+        /// It is an interface of Reset Password Method
+        /// </summary>
+        /// <param name="resetModel">It is an object of Reset Password Model class</param>
+        /// <returns></returns>
         object ResetPassword(ResetPasswordModel resetModel);
     }
 }

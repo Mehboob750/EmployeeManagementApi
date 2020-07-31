@@ -107,12 +107,12 @@ namespace EmployeeRepositoryLayer.Services
         /// This Method is used to Read all Record
         /// </summary>
         /// <returns>It returns the all record</returns>
-        public IList<EmployeeResponseModel> ReadEmployee()
+        public List<EmployeeResponseModel> ReadEmployee()
         {
             try
             {
                 // New Ilist is created to store the result 
-                IList<EmployeeResponseModel> employeeModelsList = new List<EmployeeResponseModel>();
+                List<EmployeeResponseModel> employeeModelsList = new List<EmployeeResponseModel>();
 
                 // create the object of SqlCommand and send the command and connection object
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spReadRecord", this.sqlConnection);

@@ -29,7 +29,7 @@ namespace EmployeeRepositoryLayer.Interface
         /// It is an interface of Read Employee Method 
         /// </summary>
         /// <returns>It returns the all records in IList</returns>
-        IList<EmployeeResponseModel> ReadEmployee();
+        List<EmployeeResponseModel> ReadEmployee();
 
         /// <summary>
         /// It is an interface of Update Employee Method

@@ -135,7 +135,7 @@ namespace EmployeeManagementApi.Controllers
                 var data = this.userBuiseness.ForgetPassword(forgotPassword);
                 if (data != null)
                 {
-                    return this.Ok(new { status = "True", message = "Link Has Been Sent To Your Email" });
+                    return this.Ok(new { status = "True", message = "Reset Password Link Has Been Sent To Your Email" });
                 }
                 else
                 {

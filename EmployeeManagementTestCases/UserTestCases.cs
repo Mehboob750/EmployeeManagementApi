@@ -12,11 +12,14 @@ namespace EmployeeManagementTestCases
     using EmployeeBuisenessLayer.Interface;
     using EmployeeBuisenessLayer.Services;
     using EmployeeCommonLayer.RequestModel;
+    using EmployeeCommonLayer.ResponseModel;
     using EmployeeManagementApi.Controllers;
     using EmployeeRepositoryLayer.Interface;
     using EmployeeRepositoryLayer.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Xunit;
 
     /// <summary>
@@ -98,6 +101,38 @@ namespace EmployeeManagementTestCases
             catch (Exception exception)
             {
                 Assert.IsType<Exception>(exception);
+            }
+        }
+
+        [Fact]
+        public void GivenRegisterationRequestModel_WhenRegistered_ShouldReturnsResult()
+        {
+            try
+            {
+                RegistrationRequestModel  registrationModel = new RegistrationRequestModel();
+                registrationModel.FirstName = "John";
+                registrationModel.LastName = "Sinha";
+                registrationModel.Gender = "male";
+                registrationModel.EmailId = "john@gmail.com";
+                registrationModel.PhoneNumber = "7888544502";
+                registrationModel.City = "Delhi";
+                registrationModel.Password = "john@1234";
+
+                var response = userController.UserRegistration(registrationModel) as OkObjectResult;
+                var serializeResponse = JToken.Parse(JsonConvert.SerializeObject(response.Value));
+                var responseSuccess = serializeResponse["status"].ToObject<bool>();
+                var responseMessage = serializeResponse["message"].ToString();
+
+                bool success = true;
+                string message = "User Registered Successfully";
+
+                Assert.IsType<OkObjectResult>(response);
+                Assert.Equal(success, responseSuccess);
+                Assert.Equal(message, responseMessage);
+            }
+            catch (Exception exception)
+            {
+                Assert.IsType<BadRequestObjectResult>(exception);
             }
         }
 

@@ -9,12 +9,16 @@
 namespace EmployeeManagement.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Text;
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.RequestModel;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Distributed;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Employee controller class
@@ -29,13 +33,16 @@ namespace EmployeeManagement.Controllers
         /// </summary>
         private readonly IEmployeeBL employeeBusiness;
 
+        private readonly IDistributedCache distributedCache;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeeController"/> class.
         /// </summary>
         /// /// <param name="employeeBusiness">It is an object of IEmployee Business</param>
-        public EmployeeController(IEmployeeBL employeeBusiness)
+        public EmployeeController(IEmployeeBL employeeBusiness, IDistributedCache distributedCache)
         {
             this.employeeBusiness = employeeBusiness;
+            this.distributedCache = distributedCache;
         }
 
         /// <summary>
@@ -52,7 +59,7 @@ namespace EmployeeManagement.Controllers
                 var response =  this.employeeBusiness.AddEmployee(employeeModel);
 
                 // check if response is equal to true
-                if (!response.Equals(false))
+                if (!response.Equals(null))
                 {
                     bool status = true;
                     var message = "Data Added Successfully";
@@ -80,11 +87,34 @@ namespace EmployeeManagement.Controllers
         {
             try
             {
+                List<EmployeeResponseModel> response = null;
+
+                string cacheKey = "employeeDetails";
+                string serializedList;
+
+                var encodedList = distributedCache.Get(cacheKey);
+
+                if (encodedList != null)
+                {
+                    serializedList = Encoding.UTF8.GetString(encodedList);
+                    response = JsonConvert.DeserializeObject<List<EmployeeResponseModel>>(serializedList);
+                }
+                else
+                {
+                    response = this.employeeBusiness.ReadEmployee();
+                    serializedList = JsonConvert.SerializeObject(response);
+                    encodedList = Encoding.UTF8.GetBytes(serializedList);
+                    var options = new DistributedCacheEntryOptions()
+                                      .SetSlidingExpiration(TimeSpan.FromMinutes(20))
+                                      .SetAbsoluteExpiration(DateTime.Now.AddHours(6));
+                    distributedCache.Set(cacheKey, encodedList, options);
+                }
+
                 // Call the Read Employee Method of Employee Business classs
-                var response = this.employeeBusiness.ReadEmployee();
+               // var response = this.employeeBusiness.ReadEmployee();
 
                 // check if response is equal to true
-                if (!response.Equals(false))
+                if (!response.Equals(null))
                 {
                     bool status = true;
                     var message = "Data Read Successfully";

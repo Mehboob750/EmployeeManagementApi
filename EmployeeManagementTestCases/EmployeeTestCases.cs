@@ -17,6 +17,8 @@ namespace EmployeeManagementTestCases
     using EmployeeRepositoryLayer.Interface;
     using EmployeeRepositoryLayer.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Xunit;
 
     /// <summary>
@@ -92,6 +94,42 @@ namespace EmployeeManagementTestCases
         }
 
         /// <summary>
+        /// Given EmployeeRequestModel Added Checking for multiple asserts 
+        /// </summary>
+        [Fact]
+        public void GivenEmployeeRequestModel_WhenCalledAddEmployee_ReturnsResult()
+        {
+            try
+            {
+                EmployeeRequestModel employeeModel = new EmployeeRequestModel();
+                employeeModel.FirstName = "John";
+                employeeModel.LastName = "Sinha";
+                employeeModel.Gender = "male";
+                employeeModel.EmailId = "john@gmail.com";
+                employeeModel.PhoneNumber = "7888544502";
+                employeeModel.City = "Delhi";
+               
+                var response = employeeController.AddEmployee(employeeModel) as OkObjectResult;
+                var serializeResponse = JToken.Parse(JsonConvert.SerializeObject(response.Value));
+                var responseSuccess = serializeResponse["status"].ToObject<bool>();
+                var responseMessage = serializeResponse["message"].ToString();
+                var responseData = serializeResponse["data"].ToObject<EmployeeRequestModel>();
+
+                bool success = true;
+                string message = "Data Added Successfully";
+
+                Assert.IsType<OkObjectResult>(response);
+                Assert.Equal(success, responseSuccess);
+                Assert.Equal(message, responseMessage);
+                Assert.IsType<EmployeeRequestModel>(responseData);
+            }
+            catch (Exception exception)
+            {
+                  Assert.IsType<BadRequestObjectResult>(exception);
+            }
+        }
+
+        /// <summary>
         /// Given Empty strings Added Returns Bad Object Result 
         /// </summary>
         [Fact]
@@ -99,7 +137,6 @@ namespace EmployeeManagementTestCases
         {
             try
             {
-
                 EmployeeRequestModel employeeModel = new EmployeeRequestModel();
                 employeeModel.FirstName = "";
                 employeeModel.LastName = "";
@@ -113,6 +150,37 @@ namespace EmployeeManagementTestCases
             catch (Exception exception)
             {
                 Assert.IsType<Exception>(exception);
+            }
+        }
+
+        [Fact]
+        public void GivenEmptyFields_WhenCalledAddEmployee_ShouldReturnsResult()
+        {
+            try
+            {
+                EmployeeRequestModel employeeModel = new EmployeeRequestModel();
+                employeeModel.FirstName = "";
+                employeeModel.LastName = "";
+                employeeModel.Gender = "male";
+                employeeModel.EmailId = "";
+                employeeModel.PhoneNumber = "7878544502";
+                employeeModel.City = "Delhi";
+
+                var response = employeeController.AddEmployee(employeeModel) as BadRequestObjectResult;
+                var serializeResponse = JToken.Parse(JsonConvert.SerializeObject(response.Value));
+                var responseSuccess = serializeResponse["status"].ToObject<bool>();
+                var responseMessage = serializeResponse["message"].ToString();
+
+                bool success = false;
+                string message = "Field should not be empty";
+
+                Assert.IsType<BadRequestObjectResult>(response);
+                Assert.Equal(success, responseSuccess);
+                Assert.Equal(message, responseMessage);
+            }
+            catch (Exception exception)
+            {
+                Assert.IsType<BadRequestObjectResult>(exception);
             }
         }
 
@@ -141,6 +209,37 @@ namespace EmployeeManagementTestCases
             }
         }
 
+        [Fact]
+        public void GivenNullFields_WhenCalledAddEmployee_ShouldReturnsResult()
+        {
+            try
+            {
+                EmployeeRequestModel employeeModel = new EmployeeRequestModel();
+                employeeModel.FirstName = "Javid";
+                employeeModel.LastName = "Shaikh";
+                employeeModel.Gender = "male";
+                employeeModel.EmailId = null;
+                employeeModel.PhoneNumber = "7878544502";
+                employeeModel.City = "Delhi";
+
+                var response = employeeController.AddEmployee(employeeModel) as BadRequestObjectResult;
+                var serializeResponse = JToken.Parse(JsonConvert.SerializeObject(response.Value));
+                var responseSuccess = serializeResponse["status"].ToObject<bool>();
+                var responseMessage = serializeResponse["message"].ToString();
+
+                bool success = false;
+                string message = "Field should not be null";
+
+                Assert.IsType<BadRequestObjectResult>(response);
+                Assert.Equal(success, responseSuccess);
+                Assert.Equal(message, responseMessage);
+            }
+            catch (Exception exception)
+            {
+                Assert.IsType<BadRequestObjectResult>(exception);
+            }
+        }
+
         /// <summary>
         /// Read All Employee Method used it returns Ok Result
         /// </summary>
@@ -151,6 +250,29 @@ namespace EmployeeManagementTestCases
             {
                 var response = employeeController.ReadEmployee();
                 Assert.IsType<OkObjectResult>(response);
+            }
+            catch (Exception exception)
+            {
+                Assert.IsType<Exception>(exception);
+            }
+        }
+
+        [Fact]
+        public void GivenController_WhenReadEmployeeCalled_ShouldReturnsResult()
+        {
+            try
+            {
+                var response = employeeController.ReadEmployee() as OkObjectResult; 
+                var serializeResponse = JToken.Parse(JsonConvert.SerializeObject(response.Value));
+                var responseSuccess = serializeResponse["status"].ToObject<bool>();
+                var responseMessage = serializeResponse["message"].ToString();
+
+                bool success = true;
+                string message = "Data Read Successfully";
+
+                Assert.IsType<OkObjectResult>(response);
+                Assert.Equal(success, responseSuccess);
+                Assert.Equal(message, responseMessage);
             }
             catch (Exception exception)
             {
@@ -176,6 +298,39 @@ namespace EmployeeManagementTestCases
                 employeeModel.City = "Pune";
                 var response = employeeController.UpdateEmployee(EmployeeId,employeeModel);
                 Assert.IsType<OkObjectResult>(response);
+            }
+            catch (Exception exception)
+            {
+                Assert.IsType<Exception>(exception);
+            }
+        }
+
+        [Fact]
+        public void GivenEmployeeRequestModel_WhenCalledUpdateEmployee_ShouldReturnsResult()
+        {
+            try
+            {
+                int EmployeeId = 49;
+                EmployeeRequestModel employeeModel = new EmployeeRequestModel();
+                employeeModel.FirstName = "Vijay";
+                employeeModel.LastName = "Shriwastav";
+                employeeModel.Gender = "male";
+                employeeModel.EmailId = "vijay@gmail.com";
+                employeeModel.PhoneNumber = "9889855800";
+                employeeModel.City = "Pune";
+                var response = employeeController.UpdateEmployee(EmployeeId, employeeModel) as OkObjectResult;
+                var serializeResponse = JToken.Parse(JsonConvert.SerializeObject(response.Value));
+                var responseSuccess = serializeResponse["status"].ToObject<bool>();
+                var responseMessage = serializeResponse["message"].ToString();
+                var responseData = serializeResponse["data"].ToObject<EmployeeRequestModel>();
+
+                bool success = true;
+                string message = "Data Updated Successfully";
+
+                Assert.IsType<OkObjectResult>(response);
+                Assert.Equal(success, responseSuccess);
+                Assert.Equal(message, responseMessage);
+                Assert.IsType<EmployeeRequestModel>(responseData);
             }
             catch (Exception exception)
             {
@@ -216,7 +371,7 @@ namespace EmployeeManagementTestCases
         {
             try
             {
-                int EmployeeId = 25;
+                int EmployeeId = 10;
                 var response = employeeController.DeleteEmployee(EmployeeId);
                 Assert.IsType<OkObjectResult>(response);
             }

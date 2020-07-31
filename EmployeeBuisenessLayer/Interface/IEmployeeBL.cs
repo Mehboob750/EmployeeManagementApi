@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IEmployeeBuiseness.cs" company="BridgeLabz Solution">
+// <copyright file="IEmployeeBL.cs" company="BridgeLabz Solution">
 //  Copyright (c) BridgeLabz Solution. All rights reserved.
 // </copyright>
 // <author>Mehboob Shaikh</author>
@@ -29,7 +29,7 @@ namespace EmployeeBuisenessLayer.Interface
         /// It is an interface of Read Employee Method 
         /// </summary>
         /// <returns>It returns the all records in IList</returns>
-        IList<EmployeeResponseModel> ReadEmployee();
+        List<EmployeeResponseModel> ReadEmployee();
 
         /// <summary>
         /// It is an interface of Update Employee Method

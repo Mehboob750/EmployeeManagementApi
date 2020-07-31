@@ -103,7 +103,7 @@ namespace EmployeeRepositoryLayer.Services
                 while (sqlDataReader.Read())
                 {
                     // Read the Employee Id and convert it into integer
-                    responseModel.Id = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+                    responseModel.Id = Convert.ToInt32(sqlDataReader["Id"]);
 
                     // Read the First Name
                     responseModel.FirstName = sqlDataReader["FirstName"].ToString();
@@ -185,7 +185,7 @@ namespace EmployeeRepositoryLayer.Services
                     }
 
                     // Read the Employee Id and convert it into integer
-                    loginModel.Id = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+                    loginModel.Id = Convert.ToInt32(sqlDataReader["Id"]);
 
                     // Read the First Name
                     loginModel.FirstName = sqlDataReader["FirstName"].ToString();
@@ -248,7 +248,7 @@ namespace EmployeeRepositoryLayer.Services
                 while (sqlDataReader.Read())
                 {
                     // Read the Employee Id and convert it into integer
-                    responseModel.Id = Convert.ToInt32(sqlDataReader["EmployeeId"]);
+                    responseModel.Id = Convert.ToInt32(sqlDataReader["Id"]);
 
                     // Read the Email Id
                     responseModel.EmailId = sqlDataReader["EmailId"].ToString();

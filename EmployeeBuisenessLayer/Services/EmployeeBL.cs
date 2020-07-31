@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="EmployeeBuiseness.cs" company="BridgeLabz Solution">
+// <copyright file="EmployeeBL.cs" company="BridgeLabz Solution">
 //  Copyright (c) BridgeLabz Solution. All rights reserved.
 // </copyright>
 // <author>Mehboob Shaikh</author>
@@ -46,11 +46,11 @@ namespace EmployeeBuisenessLayer.Services
             {
                 if (employeeModel.FirstName == "" || employeeModel.LastName == "" || employeeModel.City == "" || employeeModel.EmailId == "" || employeeModel.PhoneNumber == "" || employeeModel.Gender == "")
                 {
-                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.EMPTY_FIELD_EXCEPTION, "Empty Variable Field");
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.EMPTY_FIELD_EXCEPTION, "Field should not be empty");
                 }
                 else if (employeeModel.FirstName == null || employeeModel.LastName == null || employeeModel.City == null || employeeModel.EmailId == null || employeeModel.PhoneNumber == null || employeeModel.Gender == null)
                 {
-                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.NULL_FIELD_EXCEPTION, "Null Variable Field");
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.NULL_FIELD_EXCEPTION, "Field should not be null");
                 }
 
                 // Call the Add Employee Method of Employee Repository Class
@@ -68,7 +68,7 @@ namespace EmployeeBuisenessLayer.Services
         /// This Method is used to Read all Record
         /// </summary>
         /// <returns>It returns the all record</returns>
-        public IList<EmployeeResponseModel> ReadEmployee()
+        public List<EmployeeResponseModel> ReadEmployee()
         {
             try
             {

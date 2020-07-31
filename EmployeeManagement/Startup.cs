@@ -96,6 +96,12 @@ namespace EmployeeManagement
                     .AllowCredentials());
             });
 
+            // For Redis Cache
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+            });
+
             // Add application service for Employee Business Layer
             services.AddTransient<IEmployeeBL, EmployeeBL>();
 
