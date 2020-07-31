@@ -208,8 +208,31 @@ namespace EmployeeManagement.Controllers
         {
             try
             {
+                EmployeeResponseModel response = new EmployeeResponseModel();
+
+                string cacheKey = EmployeeId.ToString(); ;
+                string serializedEmployeeData;
+
+                var encodedData = distributedCache.Get(cacheKey);
+
+                if (encodedData != null)
+                {
+                    serializedEmployeeData = Encoding.UTF8.GetString(encodedData);
+                    response = JsonConvert.DeserializeObject<EmployeeResponseModel>(serializedEmployeeData);
+                }
+                else
+                {
+                    response = this.employeeBusiness.SearchEmployee(EmployeeId);
+                    serializedEmployeeData = JsonConvert.SerializeObject(response);
+                    encodedData = Encoding.UTF8.GetBytes(serializedEmployeeData);
+                    var options = new DistributedCacheEntryOptions()
+                                      .SetSlidingExpiration(TimeSpan.FromMinutes(20))
+                                      .SetAbsoluteExpiration(DateTime.Now.AddHours(6));
+                    distributedCache.Set(cacheKey, encodedData, options);
+                }
+
                 // Call the Search Employee Method of Employee Business classs
-                var response = this.employeeBusiness.SearchEmployee(EmployeeId);
+                //var response = this.employeeBusiness.SearchEmployee(EmployeeId);
 
                 // check if response count is equal to 1
                 if (!response.EmployeeId.Equals(0))
