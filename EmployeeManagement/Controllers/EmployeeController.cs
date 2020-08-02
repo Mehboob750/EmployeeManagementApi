@@ -55,12 +55,15 @@ namespace EmployeeManagement.Controllers
         {
             try
             {
+                string cacheKey = "employeeDetails";
+
                 // Call the Add Employee Method of Employee Business classs
                 var response =  this.employeeBusiness.AddEmployee(employeeModel);
 
                 // check if response is equal to true
                 if (!response.Equals(null))
                 {
+                    distributedCache.Remove(cacheKey);
                     bool status = true;
                     var message = "Data Added Successfully";
                     return this.Ok(new { status, message, data = response });
