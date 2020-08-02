@@ -183,12 +183,17 @@ namespace EmployeeManagement.Controllers
         {
             try
             {
+                string cacheKeyForEmployees = "employeeDetails";
+                string cacheKeyForEmployee = EmployeeId.ToString();
+
                 // Call the Delete Employee Method of Employee Business classs
                 var response =  this.employeeBusiness.DeleteEmployee(EmployeeId);
 
                 // check if response is equal to true
                 if (!response.EmployeeId.Equals(0))
                 {
+                    distributedCache.Remove(cacheKeyForEmployees);
+                    distributedCache.Remove(cacheKeyForEmployee);
                     bool status = true;
                     var message = "Deleted Successfully";
                     return this.Ok(new { status, message, data = response });
