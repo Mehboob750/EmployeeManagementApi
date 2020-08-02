@@ -59,7 +59,7 @@ namespace EmployeeManagement.Controllers
 
                 // Call the Add Employee Method of Employee Business classs
                 var response =  this.employeeBusiness.AddEmployee(employeeModel);
-
+                
                 // check if response is equal to true
                 if (!response.Equals(null))
                 {
@@ -146,11 +146,16 @@ namespace EmployeeManagement.Controllers
         {
             try
             {
+                string cacheKeyForEmployees = "employeeDetails";
+                string cacheKeyForEmployee = EmployeeId.ToString();
+
                 // Call the Update Employee Method of Employee Business classs
                 var response = this.employeeBusiness.UpdateEmployee(EmployeeId, employeeModel);
                 // check if response is equal to true
                 if (!response.EmployeeId.Equals(0))
                 {
+                    distributedCache.Remove(cacheKeyForEmployees);
+                    distributedCache.Remove(cacheKeyForEmployee);
                     bool status = true;
                     var message = "Data Updated Successfully";
                     return this.Ok(new { status, message, data = response });
@@ -213,7 +218,7 @@ namespace EmployeeManagement.Controllers
             {
                 EmployeeResponseModel response = new EmployeeResponseModel();
 
-                string cacheKey = EmployeeId.ToString(); ;
+                string cacheKey = EmployeeId.ToString(); 
                 string serializedEmployeeData;
 
                 var encodedData = distributedCache.Get(cacheKey);
