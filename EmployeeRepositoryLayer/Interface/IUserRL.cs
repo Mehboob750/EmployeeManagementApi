@@ -25,7 +25,7 @@ namespace EmployeeRepositoryLayer.Interface
         /// </summary>
         /// <param name="userModel">It is an object of User Model class</param>
         /// <returns>If register successfully it returns true</returns>
-        IList<RegistrationResponseModel> UserRegistration(RegistrationRequestModel registrationModel);
+        RegistrationResponseModel UserRegistration(RegistrationRequestModel registrationModel);
 
         /// <summary>
         ///  It is an interface of User Login Method

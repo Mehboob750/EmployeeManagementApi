@@ -257,7 +257,7 @@ namespace EmployeeRepositoryLayer.Services
                     status = sqlDataReader.GetInt32(0);
                     if (status == 0)
                     {
-                        return responseModel;
+                        return null;
                     }
                     // Read the Employee Id and convert it into integer
                     responseModel.Id = Convert.ToInt32(sqlDataReader["Id"]);
