@@ -13,6 +13,7 @@ namespace EmployeeManagement.Controllers
     using System.Text;
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
+    using EmployeeBuisenessLayer.Services;
     using EmployeeCommonLayer;
     using EmployeeCommonLayer.RequestModel;
     using Microsoft.AspNetCore.Authorization;
@@ -55,12 +56,20 @@ namespace EmployeeManagement.Controllers
         {
             try
             {
+                if (employeeModel.FirstName == null || employeeModel.LastName == null || employeeModel.City == null || employeeModel.EmailId == null || employeeModel.PhoneNumber == null || employeeModel.Gender == null)
+                {
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.NULL_FIELD_EXCEPTION, "Field should not be null");
+                }
+                else if (employeeModel.FirstName == "" || employeeModel.LastName == "" || employeeModel.City == "" || employeeModel.EmailId == "" || employeeModel.PhoneNumber == "" || employeeModel.Gender == "")
+                {
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.EMPTY_FIELD_EXCEPTION, "Field should not be empty");
+                }
+
                 string cacheKey = "employeeDetails";
 
                 // Call the Add Employee Method of Employee Business classs
                 var response =  this.employeeBusiness.AddEmployee(employeeModel);
                 
-
                 // check if response is equal to true
                 if (!response.EmployeeId.Equals(0))
                 {

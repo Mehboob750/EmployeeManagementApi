@@ -15,6 +15,7 @@ namespace EmployeeManagementApi.Controllers
     using System.Text;
     using System.Threading.Tasks;
     using EmployeeBuisenessLayer.Interface;
+    using EmployeeBuisenessLayer.Services;
     using EmployeeCommonLayer.RequestModel;
     using EmployeeManagement.Sender;
     using Microsoft.AspNetCore.Authorization;
@@ -57,6 +58,15 @@ namespace EmployeeManagementApi.Controllers
         {
             try
             {
+                 if (registrationModel.FirstName == null || registrationModel.LastName == null || registrationModel.City == null || registrationModel.EmailId == null || registrationModel.PhoneNumber == null || registrationModel.Gender == null || registrationModel.Password == null)
+                {
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.NULL_FIELD_EXCEPTION, "Null Variable Field");
+                }
+                else if (registrationModel.FirstName == "" || registrationModel.LastName == "" || registrationModel.City == "" || registrationModel.EmailId == "" || registrationModel.PhoneNumber == "" || registrationModel.Gender == "" || registrationModel.Password == "")
+                {
+                    throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.EMPTY_FIELD_EXCEPTION, "Empty Variable Field");
+                }
+
                 // Call the User Registration Method of User Business classs
                 var response = this.userBuiseness.UserRegistration(registrationModel);
 
@@ -109,7 +119,7 @@ namespace EmployeeManagementApi.Controllers
                 {
                     bool status = false;
                     var message = "Fail To Login";
-                    return this.BadRequest(new { status, message});
+                    return this.NotFound(new { status, message});
                 }
             }
             catch (Exception e)
@@ -139,7 +149,7 @@ namespace EmployeeManagementApi.Controllers
                 }
                 else
                 {
-                    return this.BadRequest(new { status = "False", message = "Your Email Is Not Correct" });
+                    return this.NotFound(new { status = "False", message = "Email Is Not Correct" });
                 }
             }
             catch (Exception exception)
