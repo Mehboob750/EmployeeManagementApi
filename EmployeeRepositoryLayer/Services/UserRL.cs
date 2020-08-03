@@ -61,12 +61,11 @@ namespace EmployeeRepositoryLayer.Services
         /// </summary>
         /// <param name="userModel">It contains the Object of User Model</param>
         /// <returns>If User Registered Successfully it returns true</returns>
-        public IList<RegistrationResponseModel> UserRegistration(RegistrationRequestModel registrationModel)
+        public RegistrationResponseModel UserRegistration(RegistrationRequestModel registrationModel)
         {
             try
             {
                 RegistrationResponseModel responseModel = new RegistrationResponseModel();
-                IList<RegistrationResponseModel> userModelList = new List<RegistrationResponseModel>();
                 // create the object of SqlCommand and send the command and connection object
                 SqlCommand sqlCommand = this.StoreProcedureConnection("spUserRegister", this.sqlConnection);
 
@@ -99,9 +98,17 @@ namespace EmployeeRepositoryLayer.Services
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
+                int status = 1;
+
+                // Read the employee data from database using SqlDataReader
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
+                    status = sqlDataReader.GetInt32(0);
+                    if (status == 0)
+                    {
+                        return responseModel;
+                    }
                     // Read the Employee Id and convert it into integer
                     responseModel.Id = Convert.ToInt32(sqlDataReader["Id"]);
 
@@ -129,16 +136,13 @@ namespace EmployeeRepositoryLayer.Services
                     responseModel.RegistrationDate = Convert.ToDateTime(sqlDataReader["RegistrationDate"]);
                    
                     //responseModel.UpdationDate = Convert.ToDateTime(sqlDataReader["UpdationDate"]);
-
-                    // Add all the data into Ilist
-                    userModelList.Add(responseModel);
                 }
 
                 // close Sql Connection
                 this.sqlConnection.Close();
 
                 // return the Ilist
-                return userModelList;
+                return responseModel;
             }
             catch (Exception e)
             {
@@ -172,13 +176,13 @@ namespace EmployeeRepositoryLayer.Services
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
-                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 int status = 1;
-               
+
+                // Read the employee data from database using SqlDataReader
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
                     status = sqlDataReader.GetInt32(0);
-
                     if (status == 0)
                     {
                         return loginModel;
@@ -244,9 +248,17 @@ namespace EmployeeRepositoryLayer.Services
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
+                int status = 1;
+
+                // Read the employee data from database using SqlDataReader
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
+                    status = sqlDataReader.GetInt32(0);
+                    if (status == 0)
+                    {
+                        return responseModel;
+                    }
                     // Read the Employee Id and convert it into integer
                     responseModel.Id = Convert.ToInt32(sqlDataReader["Id"]);
 
@@ -314,7 +326,7 @@ namespace EmployeeRepositoryLayer.Services
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                int status;
+                int status=1;
                 while (sqlDataReader.Read())
                 {
                     status = sqlDataReader.GetInt32(0);

@@ -61,7 +61,7 @@ namespace EmployeeManagementApi.Controllers
                 var response = this.userBuiseness.UserRegistration(registrationModel);
 
                 // check if response is equal to true
-                if (!response.Equals(false))
+                if (!response.Id.Equals(0))
                 {
                     bool status = true;
                     var message = "User Registered Successfully";
@@ -72,8 +72,8 @@ namespace EmployeeManagementApi.Controllers
                 else
                 {
                     bool status = false;
-                    var message = "Fail To Register User";
-                    return this.BadRequest(new { status, message });
+                    var message = "User already Present";
+                    return this.Conflict(new { status, message });
                 }
             }
             catch (Exception e)

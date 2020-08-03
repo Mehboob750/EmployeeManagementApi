@@ -40,7 +40,7 @@ namespace EmployeeBuisenessLayer.Services
         /// </summary>
         /// <param name="registrationModel">It contains the Object of Registration Request Model</param>
         /// <returns>If User Registered Successfully it returns true</returns>
-        public IList<RegistrationResponseModel> UserRegistration(RegistrationRequestModel registrationModel)
+        public RegistrationResponseModel UserRegistration(RegistrationRequestModel registrationModel)
         {
             try
             {

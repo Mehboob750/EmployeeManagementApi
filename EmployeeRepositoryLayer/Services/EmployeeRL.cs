@@ -64,9 +64,17 @@ namespace EmployeeRepositoryLayer.Services
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
+                int status = 1;
+
+                // Read the employee data from database using SqlDataReader
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
+                    status = sqlDataReader.GetInt32(0);
+                    if (status == 0)
+                    {
+                        return employeeResponseModel;
+                    }
                     // Read the Employee Id and convert it into integer
                     employeeResponseModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
 
@@ -208,9 +216,17 @@ namespace EmployeeRepositoryLayer.Services
 
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
+                int status = 1;
+
+                // Read the employee data from database using SqlDataReader
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
+                    status = sqlDataReader.GetInt32(0);
+                    if (status == 0)
+                    {
+                        return employeeResponseModel;
+                    }
                     // Read the Employee Id and convert it into integer
                     employeeResponseModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
 
@@ -271,9 +287,17 @@ namespace EmployeeRepositoryLayer.Services
 
                     // Opens the Sql Connection
                     this.sqlConnection.Open();
+                    int status = 1;
+
+                    // Read the employee data from database using SqlDataReader
                     SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
                     while (sqlDataReader.Read())
                     {
+                        status = sqlDataReader.GetInt32(0);
+                        if (status == 0)
+                        {
+                            return employeeResponseModel;
+                        }
                         // Read the Employee Id and convert it into integer
                         employeeResponseModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
 
@@ -337,16 +361,23 @@ namespace EmployeeRepositoryLayer.Services
                    // sqlCommand.Parameters.AddWithValue("@EmailId", EmailId);
                 }
 
+                EmployeeResponseModel employeeModel = new EmployeeResponseModel();
+
                 // Opens the Sql Connection
                 this.sqlConnection.Open();
 
+                int status = 1;
+
                 // Read the employee data from database using SqlDataReader
                 SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-
-                EmployeeResponseModel employeeModel = new EmployeeResponseModel();
-                // Data is read upto data is present 
+                
                 while (sqlDataReader.Read())
                 {
+                    status = sqlDataReader.GetInt32(0);
+                    if (status == 0)
+                    {
+                        return employeeModel;
+                    }
                     // Read the Employee Id and convert it into integer
                     employeeModel.EmployeeId = Convert.ToInt32(sqlDataReader["EmployeeId"]);
 

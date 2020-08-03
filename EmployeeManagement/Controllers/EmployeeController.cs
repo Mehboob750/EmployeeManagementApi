@@ -60,8 +60,9 @@ namespace EmployeeManagement.Controllers
                 // Call the Add Employee Method of Employee Business classs
                 var response =  this.employeeBusiness.AddEmployee(employeeModel);
                 
+
                 // check if response is equal to true
-                if (!response.Equals(null))
+                if (!response.EmployeeId.Equals(0))
                 {
                     distributedCache.Remove(cacheKey);
                     bool status = true;
@@ -71,8 +72,8 @@ namespace EmployeeManagement.Controllers
                 else
                 {
                     bool status = false;
-                    var message = "Fail To Add Data";
-                    return this.BadRequest(new { status, message });
+                    var message = "Data already Present";
+                    return this.Conflict(new { status, message });
                 }
             }
             catch (Exception e)
@@ -126,8 +127,8 @@ namespace EmployeeManagement.Controllers
                 else
                 {
                     bool status = false;
-                    var message = "Fail To Read Data";
-                    return this.BadRequest(new { status, message });
+                    var message = "Data Not Found";
+                    return this.NotFound(new { status, message });
                 }
             }
             catch (Exception e)
@@ -163,8 +164,8 @@ namespace EmployeeManagement.Controllers
                 else
                 {
                     bool status = false;
-                    var message = "Fail To Update Data";
-                    return this.BadRequest(new { status, message });
+                    var message = "EmployeeId Not Found";
+                    return this.NotFound(new { status, message });
                 }
             }
             catch (Exception e)
@@ -202,7 +203,7 @@ namespace EmployeeManagement.Controllers
                 {
                     bool status = false;
                     var message = "No record To Delete";
-                    return this.BadRequest(new { status, message});
+                    return this.NotFound(new { status, message});
                 }
             }
             catch (Exception e)
@@ -258,7 +259,7 @@ namespace EmployeeManagement.Controllers
                 {
                     bool status = false;
                     var message = "Record Not Found";
-                    return this.BadRequest(new { status, message });
+                    return this.NotFound(new { status, message });
                 }
             }
             catch (Exception e)
