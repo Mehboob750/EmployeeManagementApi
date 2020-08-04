@@ -58,7 +58,7 @@ namespace EmployeeManagementApi.Controllers
         {
             try
             {
-                 if (registrationModel.FirstName == null || registrationModel.LastName == null || registrationModel.City == null || registrationModel.EmailId == null || registrationModel.PhoneNumber == null || registrationModel.Gender == null || registrationModel.Password == null)
+                if (registrationModel.FirstName == null || registrationModel.LastName == null || registrationModel.City == null || registrationModel.EmailId == null || registrationModel.PhoneNumber == null || registrationModel.Gender == null || registrationModel.Password == null)
                 {
                     throw new EmployeeManagementException(EmployeeManagementException.ExceptionType.NULL_FIELD_EXCEPTION, "Null Variable Field");
                 }
